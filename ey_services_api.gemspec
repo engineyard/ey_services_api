@@ -4,7 +4,7 @@ require "ey_services_api/version"
 
 Gem::Specification.new do |s|
   s.name        = "ey_services_api"
-  s.version     = EyServicesApi::VERSION
+  s.version     = EY::ServicesAPI::VERSION
   s.authors     = ["Thorben Schröder & Jacob Burkhart"]
   s.email       = ["tschroder@engineyard.com"]
   s.homepage    = ""
@@ -17,4 +17,8 @@ Gem::Specification.new do |s|
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
   s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
   s.require_paths = ["lib"]
+  
+  s.add_development_dependency 'rspec'
+  s.add_dependency 'rack-client'
+  s.add_dependency 'json'
 end

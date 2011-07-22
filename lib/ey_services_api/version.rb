@@ -1,3 +1,5 @@
-module EyServicesApi
-  VERSION = "0.0.1"
+module EY
+  module ServicesAPI
+    VERSION = "0.0.1"
+  end
 end
