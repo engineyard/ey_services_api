@@ -88,6 +88,14 @@ module EY
         handle_response(url, response)
       end
 
+      #Jacob: will refactor if reach 200 lines!
+
+      def send_message(url, message)
+        puts "Sending message to #{url}"
+        response = self.client.post(url, STANDARD_HEADERS, {:message => message.to_hash}.to_json)
+        handle_response(url, response)
+      end
+
       protected
       def handle_response(url, response)
         case response.status
