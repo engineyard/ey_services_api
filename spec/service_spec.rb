@@ -4,7 +4,7 @@ require 'sinatra'
 describe EY::ServicesAPI::Service do
 
   before do
-    @valid_params = EY::ServicesAPI::Service.dummy_attributes
+    @valid_params = Lisonja.regular_service_registration_params
     @service = EY::ServicesAPI::Service.new(@valid_params)
   end
   
@@ -28,25 +28,25 @@ describe EY::ServicesAPI::Service do
         @registration_url = partner[:registration_url]
         @api_secret = partner[:api_secret]
 
-        @registration_params = EY::ServicesAPI::Service.dummy_attributes
-        @connection = EY::ServicesAPI::Connection.new(@registration_url, @api_secret)
+        @registration_params = Lisonja.regular_service_registration_params
+        @connection = EY::ServicesAPI::Connection.new(@api_secret)
       end
 
       it "can register a service" do
-        service = @connection.register_service(@registration_params)
+        service = @connection.register_service(@registration_url, @registration_params)
         service.should be_a EY::ServicesAPI::Service
         service.url.should_not be_nil
       end
 
       it "can handle errors on registration" do
         lambda{ 
-          @connection.register_service(@registration_params.merge(:name => nil))
+          @connection.register_service(@registration_url, @registration_params.merge(:name => nil))
         }.should raise_error(EY::ServicesAPI::Connection::ValidationError, /Name can't be blank/)
       end
 
       describe "with a registered service" do
         before do
-          @service = @connection.register_service(@registration_params)
+          @service = @connection.register_service(@registration_url, @registration_params)
         end
 
         it "can fetch your service" do

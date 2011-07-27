@@ -36,10 +36,9 @@ describe EY::ServicesAPI::ServiceAccount do
     end
 
     it "can send a message to the customer" do
-      registration_url = @service_account_hash[:service][:partner][:registration_url]
       api_token = @service_account_hash[:service][:partner][:api_token]
 
-      @connection = EY::ServicesAPI::Connection.new(registration_url, api_token)
+      @connection = EY::ServicesAPI::Connection.new(api_token)
 
       @connection.send_message(@service_account.messages_url, EY::ServicesAPI::StatusMessage.new(:subject => "another messages", :body => "with some content"))
 

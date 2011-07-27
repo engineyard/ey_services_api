@@ -3,7 +3,7 @@ require 'json'
 
 module EY
   module ServicesAPI
-    class Connection < Struct.new(:registration_url, :api_secret)
+    class Connection < Struct.new(:api_secret)
 
       class NotFound < StandardError
         def initialize(url)
@@ -54,11 +54,10 @@ module EY
           'Accept'=> 'application/json', 
           'USER_AGENT' => "Lisonja"}
 
-      def register_service(params)
-        post_to_url = self.registration_url
-        response = self.client.post(post_to_url, STANDARD_HEADERS, {:service => params}.to_json)
+      def register_service(registration_url, params)
+        response = self.client.post(registration_url, STANDARD_HEADERS, {:service => params}.to_json)
 
-        handle_response(post_to_url, response) do
+        handle_response(registration_url, response) do
           service = Service.new(params)
           service.connection = self
           service.url = response["Location"]

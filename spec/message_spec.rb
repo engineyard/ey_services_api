@@ -9,14 +9,9 @@ describe EY::ServicesAPI::StatusMessage do
     describe "with a service account" do
       before do
         @service_account = @tresfiestas.create_service_account
-
         @messages_url = @service_account[:messages_url]
-
-        #TODO: don't require a registration_url for making a connection
-        registration_url = @service_account[:service][:partner][:registration_url]
         api_token = @service_account[:service][:partner][:api_token]
-
-        @connection = EY::ServicesAPI::Connection.new(registration_url, api_token)
+        @connection = EY::ServicesAPI::Connection.new(api_token)
       end
 
       it "POSTs to the message callback URL to send a message" do
@@ -36,8 +31,6 @@ describe EY::ServicesAPI::StatusMessage do
         lambda{
           @connection.send_message(@messages_url, EY::ServicesAPI::StatusMessage.new(:subject => "", :body => ""))
         }.should raise_error(EY::ServicesAPI::Connection::ValidationError, /Subject can't be blank/)
-        # #Not
-        # @tresfiestas.recieved_messages.latest.subject ...
       end
 
     end
