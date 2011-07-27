@@ -6,7 +6,8 @@ describe EY::ServicesAPI::ServiceAccount do
 
   describe "with a service account" do
     before do
-      @creation_request = @tresfiestas.service_account_creation_request()
+      @service_account_hash = @tresfiestas.create_service_account
+      @creation_request = @tresfiestas.service_account_creation_request(@service_account_hash)
       @service_account = EY::ServicesAPI::ServiceAccount.create_from_request(@creation_request.to_json)
     end
 
@@ -34,16 +35,17 @@ describe EY::ServicesAPI::ServiceAccount do
       response_hash[:message].should eq({:message_type => 'status', :subject => "some messages", :body => nil})
     end
 
-    describe "with a connection" do
-      include_context 'tresfiestas connection'
+    it "can send a message to the customer" do
+      registration_url = @service_account_hash[:service][:partner][:registration_url]
+      api_token = @service_account_hash[:service][:partner][:api_token]
 
-      it "can send a message to the customer" do
-        @connection.send_message(@service_account.messages_url, EY::ServicesAPI::StatusMessage.new(:subject => "another messages", :body => "with some content"))
+      @connection = EY::ServicesAPI::Connection.new(registration_url, api_token)
 
-        latest_status_message = @tresfiestas.latest_status_message
-        latest_status_message[:subject].should eq "another messages"
-        latest_status_message[:body].should eq "with some content"
-      end
+      @connection.send_message(@service_account.messages_url, EY::ServicesAPI::StatusMessage.new(:subject => "another messages", :body => "with some content"))
+
+      latest_status_message = @tresfiestas.latest_status_message
+      latest_status_message[:subject].should eq "another messages"
+      latest_status_message[:body].should eq "with some content"
     end
   end
 

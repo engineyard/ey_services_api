@@ -3,7 +3,6 @@ require 'json'
 
 module EY
   module ServicesAPI
-    puts "loading the Connection class.."
     class Connection < Struct.new(:registration_url, :api_secret)
 
       class NotFound < StandardError
@@ -91,7 +90,6 @@ module EY
       #Jacob: will refactor if reach 200 lines!
 
       def send_message(url, message)
-        puts "Sending message to #{url}"
         response = self.client.post(url, STANDARD_HEADERS, {:message => message.to_hash}.to_json)
         handle_response(url, response)
       end
