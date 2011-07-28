@@ -24,7 +24,7 @@ describe EY::ServicesAPI::ServiceAccountCreation do
         presenter.url = "some resource url"
         presenter.configuration_required = true
         presenter.configuration_url = "some config url" #doesn't even have to be valid here!
-        presenter.message = EY::ServicesAPI::StatusMessage.new(:subject => "some messages")
+        presenter.message = EY::ServicesAPI::Message.new(:message_type => "status", :subject => "some messages")
       end
 
       service_account_response = response_hash[:service_account]

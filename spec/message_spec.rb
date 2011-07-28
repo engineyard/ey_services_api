@@ -2,7 +2,7 @@ require 'spec_helper'
 require 'sinatra'
 
 #TODO: support a generic message class too?
-describe EY::ServicesAPI::StatusMessage do
+describe EY::ServicesAPI::Message do
   include_context 'tresfiestas setup'
 
   describe "#send_message" do
@@ -16,7 +16,7 @@ describe EY::ServicesAPI::StatusMessage do
 
       it "POSTs to the message callback URL to send a message" do
 
-        message = EY::ServicesAPI::StatusMessage.new(:subject => "Subjecty", :body => "Whee")
+        message = EY::ServicesAPI::Message.new(:message_type => "status", :subject => "Subjecty", :body => "Whee")
         @connection.send_message(@messages_url, message)
 
         latest = @tresfiestas.latest_status_message
@@ -29,8 +29,14 @@ describe EY::ServicesAPI::StatusMessage do
 
       it "returns an error when the message is not valid" do
         lambda{
-          @connection.send_message(@messages_url, EY::ServicesAPI::StatusMessage.new(:subject => "", :body => ""))
+          @connection.send_message(@messages_url, EY::ServicesAPI::Message.new(:subject => "", :body => ""))
         }.should raise_error(EY::ServicesAPI::Connection::ValidationError, /Subject can't be blank/)
+      end
+
+      it "returns an error when the message_type is not valid" do
+        lambda{
+          @connection.send_message(@messages_url, EY::ServicesAPI::Message.new(:message_type => "urgent_reminder", :subject => "valid"))
+        }.should raise_error(EY::ServicesAPI::Connection::ValidationError, /Message type must be one of: status, notification or alert/)
       end
 
     end
@@ -44,7 +50,7 @@ describe EY::ServicesAPI::StatusMessage do
       end
 
       it "POSTs to the message callback URL to send a message" do
-        message = EY::ServicesAPI::StatusMessage.new(:subject => "Subjectish", :body => "Bodily")
+        message = EY::ServicesAPI::Message.new(:message_type => "status", :subject => "Subjectish", :body => "Bodily")
         @connection.send_message(@messages_url, message)
 
         latest = @tresfiestas.latest_status_message
@@ -57,8 +63,14 @@ describe EY::ServicesAPI::StatusMessage do
 
       it "returns an error when the message is not valid" do
         lambda{
-          @connection.send_message(@messages_url, EY::ServicesAPI::StatusMessage.new(:subject => "", :body => ""))
+          @connection.send_message(@messages_url, EY::ServicesAPI::Message.new(:message_type => "status", :subject => "", :body => ""))
         }.should raise_error(EY::ServicesAPI::Connection::ValidationError, /Subject can't be blank/)
+      end
+
+      it "returns an error when the message_type is not valid" do
+        lambda{
+          @connection.send_message(@messages_url, EY::ServicesAPI::Message.new(:message_type => "urgent_reminder", :subject => "valid"))
+        }.should raise_error(EY::ServicesAPI::Connection::ValidationError, /Message type must be one of: status, notification or alert/)
       end
 
     end

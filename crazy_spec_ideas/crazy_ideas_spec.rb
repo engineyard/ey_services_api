@@ -18,7 +18,7 @@ class ServiceCreationTest < Sinatra::Base
       presenter.url = "some resource url"
       presenter.configuration_required = true
       presenter.configuration_url = "some config url" #doesn't even have to be valid here!
-      presenter.message = EY::ServicesAPI::StatusMessage.new(:subject => "some messages")
+      presenter.message = EY::ServicesAPI::Message.new(:message_type => "status", :subject => "some messages")
     end
 
     Assertions.make! "making the response" do
@@ -58,7 +58,7 @@ class ServiceCreationTest < Sinatra::Base
       presenter.url = "some resource url"
       presenter.configuration_required = true
       presenter.configuration_url = "some config url" #doesn't even have to be valid here!
-      presenter.message = EY::ServicesAPI::StatusMessage.new(:subject => "some messages")
+      presenter.message = EY::ServicesAPI::Message.new(:message_type => "status", :subject => "some messages")
     end.to_json
   end
 
@@ -81,7 +81,8 @@ it "can send messages" do
   created_customer = ServiceCreationTest.latest_customer
   connection = ServiceCreationTest.get_connection
 
-  connection.send_message(created_customer.messages_url, EY::ServicesAPI::StatusMessage.new(:subject => "another messages", :body => "with some content"))
+  connection.send_message(created_customer.messages_url, 
+    EY::ServicesAPI::Message.new(:message_type => "status", :subject => "another messages", :body => "with some content"))
 
   latest_status_message = @tresfiestas.latest_status_message
   latest_status_message[:subject].should eq "another messages"

@@ -28,7 +28,7 @@ describe EY::ServicesAPI::ProvisionedServiceCreation do
         presenter.vars = {"SOME_ENV_VAR" => "value", "OTHER_VAR" => "blah"}
         presenter.configuration_required = true
         presenter.configuration_url = "some config url" #doesn't even have to be valid here!
-        presenter.message = EY::ServicesAPI::StatusMessage.new(:subject => "some messages")
+        presenter.message = EY::ServicesAPI::Message.new(:message_type => "status", :subject => "some messages")
       end
     
       provisioned_service_response = response_hash[:provisioned_service]
@@ -38,18 +38,6 @@ describe EY::ServicesAPI::ProvisionedServiceCreation do
       provisioned_service_response[:url].should eq "some resource url"
       response_hash[:message].should eq({:message_type => 'status', :subject => "some messages", :body => nil})
     end
-    # 
-    # it "can send a message to the customer" do
-    #   api_token = @service_account_hash[:service][:partner][:api_token]
-    # 
-    #   @connection = EY::ServicesAPI::Connection.new(api_token)
-    # 
-    #   @connection.send_message(@service_account.messages_url, EY::ServicesAPI::StatusMessage.new(:subject => "another messages", :body => "with some content"))
-    # 
-    #   latest_status_message = @tresfiestas.latest_status_message
-    #   latest_status_message[:subject].should eq "another messages"
-    #   latest_status_message[:body].should eq "with some content"
-    # end
   end
 
 end
