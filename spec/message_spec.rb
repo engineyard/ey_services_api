@@ -34,5 +34,34 @@ describe EY::ServicesAPI::StatusMessage do
       end
 
     end
+
+    describe "with a provisioned service" do
+      before do
+        @provisioned_service = @tresfiestas.create_provisioned_service
+        @messages_url = @provisioned_service[:messages_url]
+        api_token = @provisioned_service[:service_account][:service][:partner][:api_token]
+        @connection = EY::ServicesAPI::Connection.new(api_token)
+      end
+
+      it "POSTs to the message callback URL to send a message" do
+        message = EY::ServicesAPI::StatusMessage.new(:subject => "Subjectish", :body => "Bodily")
+        @connection.send_message(@messages_url, message)
+
+        latest = @tresfiestas.latest_status_message
+        latest.should_not be_blank
+        latest[:provisioned_service_id].should == @provisioned_service[:id]
+
+        latest[:subject].should === "Subjectish"
+        latest[:body].should === "Bodily"
+      end
+
+      it "returns an error when the message is not valid" do
+        lambda{
+          @connection.send_message(@messages_url, EY::ServicesAPI::StatusMessage.new(:subject => "", :body => ""))
+        }.should raise_error(EY::ServicesAPI::Connection::ValidationError, /Subject can't be blank/)
+      end
+
+    end
+
   end
 end

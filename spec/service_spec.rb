@@ -2,9 +2,10 @@ require 'spec_helper'
 require 'sinatra'
 
 describe EY::ServicesAPI::Service do
+  include_context 'tresfiestas setup'
 
   before do
-    @valid_params = Lisonja.regular_service_registration_params
+    @valid_params = @tresfiestas.service_registration_params
     @service = EY::ServicesAPI::Service.new(@valid_params)
   end
 
@@ -19,7 +20,6 @@ describe EY::ServicesAPI::Service do
   end
 
   describe "#register_service" do
-    include_context 'tresfiestas setup'
 
     describe "with a registration_url and api_secret" do
       before do
@@ -28,7 +28,7 @@ describe EY::ServicesAPI::Service do
         @registration_url = partner[:registration_url]
         @api_secret = partner[:api_secret]
 
-        @registration_params = Lisonja.regular_service_registration_params
+        @registration_params = @tresfiestas.service_registration_params
         @connection = EY::ServicesAPI::Connection.new(@api_secret)
       end
 
