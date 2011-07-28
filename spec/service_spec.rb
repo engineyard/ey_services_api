@@ -7,7 +7,7 @@ describe EY::ServicesAPI::Service do
     @valid_params = Lisonja.regular_service_registration_params
     @service = EY::ServicesAPI::Service.new(@valid_params)
   end
-  
+
   it "can be initialized with a hash" do
     @service.should be_a EY::ServicesAPI::Service
     @service.name.should eq @valid_params[:name]
