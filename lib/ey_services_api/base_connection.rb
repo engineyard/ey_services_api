@@ -4,10 +4,11 @@ require 'json'
 module EY
   module ServicesAPI
     class BaseConnection
-      attr_reader :api_secret
+      attr_reader :auth_id, :auth_key
 
-      def initialize(api_secret, user_agent = nil)
-        @api_secret = api_secret
+      def initialize(auth_id, auth_key, user_agent = nil)
+        @auth_id = auth_id
+        @auth_key = auth_key
         @standard_headers = {
             'CONTENT_TYPE' => 'application/json',
             'Accept'=> 'application/json', 
@@ -25,18 +26,12 @@ module EY
         attr_reader :error_messages
 
         def initialize(response)
-          json_response = nil
-          begin
-            json_response = JSON.parse(response.body)
-          rescue => e
-          end
-          if json_response
-            @error_messages = json_response["error_messages"]
-            super("error: #{@error_messages.join("\n")}")
-          else
-            @error_messages = []
-            super("error: #{response.body}")
-          end
+          json_response = JSON.parse(response.body)
+          @error_messages = json_response["error_messages"]
+          super("error: #{@error_messages.join("\n")}")
+        rescue => e
+          @error_messages = []
+          super("error: #{response.body}")
         end
       end
 

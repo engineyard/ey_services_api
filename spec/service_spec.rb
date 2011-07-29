@@ -21,15 +21,16 @@ describe EY::ServicesAPI::Service do
 
   describe "#register_service" do
 
-    describe "with a registration_url and api_secret" do
+    describe "with a registration_url" do
       before do
         partner = @tresfiestas.create_partner
 
         @registration_url = partner[:registration_url]
-        @api_secret = partner[:api_secret]
+        @auth_id = partner[:auth_id]
+        @auth_key = partner[:auth_key]
 
         @registration_params = @tresfiestas.service_registration_params
-        @connection = EY::ServicesAPI::Connection.new(@api_secret)
+        @connection = EY::ServicesAPI::Connection.new(@auth_id, @auth_key)
       end
 
       it "can register a service" do
