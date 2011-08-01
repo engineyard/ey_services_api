@@ -7,8 +7,9 @@ describe EY::ServicesAPI::Invoice do
   before do
     @service_account = @tresfiestas.create_service_account
     @invoices_url = @service_account[:invoices_url]
-    api_token = @service_account[:service][:partner][:api_token]
-    @connection = EY::ServicesAPI::Connection.new(api_token)
+    auth_id = @service_account[:service][:partner][:auth_id]
+    auth_key = @service_account[:service][:partner][:auth_key]
+    @connection = EY::ServicesAPI::Connection.new(auth_id, auth_key)
   end
 
   it "can send an invoice" do
