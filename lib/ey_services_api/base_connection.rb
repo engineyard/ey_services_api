@@ -46,9 +46,23 @@ module EY
         @backend ||= Rack::Client::Handler::NetHTTP
       end
 
+      class RequestAuth
+        def initialize(app, auth_id, auth_key)
+          @app, @auth_id, @auth_key = app, auth_id, auth_key
+        end
+        def call(env)
+          env["HTTP_AUTHORIZATION"] = "AuthTODOFIXME #{@auth_id}:#{@auth_key}"
+          @app.call(env)
+        end
+      end
+
       def client
         bak = self.backend
+        #damn you scope!
+        auth_id_arg = auth_id
+        auth_key_arg = auth_key
         @client ||= Rack::Client.new do
+          use RequestAuth, auth_id_arg, auth_key_arg
           run bak
         end
       end
