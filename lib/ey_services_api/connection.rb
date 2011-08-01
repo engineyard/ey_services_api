@@ -3,7 +3,7 @@ require 'json'
 
 module EY
   module ServicesAPI
-    class Connection < BaseConnection
+    class Connection < EY::ApiHMAC::BaseConnection
 
       def default_user_agent
         "EY-ServicesAPI/#{VERSION}"
