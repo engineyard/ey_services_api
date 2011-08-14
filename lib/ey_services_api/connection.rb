@@ -1,5 +1,6 @@
 require 'rack/client'
 require 'json'
+require 'ey_api_hmac'
 
 module EY
   module ServicesAPI
