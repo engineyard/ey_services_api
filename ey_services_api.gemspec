@@ -19,6 +19,6 @@ Gem::Specification.new do |s|
   s.require_paths = ["lib"]
   
   s.add_development_dependency 'rspec'
-  s.add_dependency 'rack-client'
   s.add_dependency 'json'
+  s.add_dependency 'ey_api_hmac'
 end

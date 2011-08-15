@@ -8,7 +8,6 @@ group :test, :development do
   # 
   # #Note: would be better if we required lisonja expliclity, which required this... but not supported by gemspecs
   # #all will be sane when we break into separate projects "I promise"
-  gem 'ey_api_hmac', :path => "../ey_api_hmac"
   gem 'lisonja', :path => "../../spike/lisonja"
 
   gem 'ruby-debug-base19'
