@@ -20,7 +20,7 @@ module EY
       end
 
       def get_service(url)
-        response = get(url) do |json_body|
+        response = get(url) do |json_body, response_location|
           service = Service.new(json_body["service"])
           service.connection = self
           service.url = url

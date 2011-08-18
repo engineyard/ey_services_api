@@ -9,5 +9,10 @@ group :test, :development do
   # gem 'tresfiestas', :git => "git@github.com:engineyard/tresfiestas.git"
   gem 'tresfiestas', :path => "../tresfiestas"
 
+  #TODO: this should just be a dep of tresfiestas
+  gem 'lisonja', :path => "../lisonja"
+  #TODO: this should just be a dep of lisonja
+  gem 'ey_services_api', :path => "../ey_services_api"
+
   gem 'sinatra'
 end
