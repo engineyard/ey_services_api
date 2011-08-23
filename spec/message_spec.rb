@@ -12,7 +12,8 @@ describe EY::ServicesAPI::Message do
         @messages_url = @service_account[:messages_url]
         auth_id = @service_account[:service][:partner][:auth_id]
         auth_key = @service_account[:service][:partner][:auth_key]
-        @connection = EY::ServicesAPI::Connection.new(auth_id, auth_key)
+        EY::ServicesAPI.setup!(:auth_id => auth_id, :auth_key => auth_key)
+        @connection = EY::ServicesAPI.connection
       end
 
       it "POSTs to the message callback URL to send a message" do
@@ -48,7 +49,8 @@ describe EY::ServicesAPI::Message do
         @messages_url = @provisioned_service[:messages_url]
         auth_id = @provisioned_service[:service_account][:service][:partner][:auth_id]
         auth_key = @provisioned_service[:service_account][:service][:partner][:auth_key]
-        @connection = EY::ServicesAPI::Connection.new(auth_id, auth_key)
+        EY::ServicesAPI.setup!(:auth_id => auth_id, :auth_key => auth_key)
+        @connection = EY::ServicesAPI.connection
       end
 
       it "POSTs to the message callback URL to send a message" do

@@ -11,6 +11,21 @@ require "ey_services_api/provisioned_service_response"
 
 module EY
   module ServicesAPI
-    
+
+    def self.setup!(opts)
+      @connection = Connection.new(opts[:auth_id], opts[:auth_key])
+    end
+
+    def self.connection
+      @connection or raise "Not setup!"
+    end
+
+    def self.enable_mock!
+      require "ey_services_api/test/tresfiestas_fake"
+      TresfiestasFake.reset!
+      EY::ServicesAPI.connection.backend = TresfiestasFake::RackApp
+      TresfiestasFake.mock_helper
+    end
+
   end
 end

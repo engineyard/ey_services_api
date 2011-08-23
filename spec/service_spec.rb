@@ -30,7 +30,9 @@ describe EY::ServicesAPI::Service do
         @auth_key = partner[:auth_key]
 
         @registration_params = @tresfiestas.service_registration_params
-        @connection = EY::ServicesAPI::Connection.new(@auth_id, @auth_key)
+
+        EY::ServicesAPI.setup!(:auth_id => @auth_id, :auth_key => @auth_key)
+        @connection = EY::ServicesAPI.connection
       end
 
       it "can register a service" do

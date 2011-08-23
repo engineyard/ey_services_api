@@ -7,6 +7,7 @@ shared_context "tresfiestas setup" do
   before(:all) do
     backend = Tresfiestas::GemIntegrationTest
     @tresfiestas = backend.setup!
+    # @tresfiestas = EY::ServicesAPI.enable_mock!
   end
 
   before do
