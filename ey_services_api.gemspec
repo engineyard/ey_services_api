@@ -5,11 +5,11 @@ require "ey_services_api/version"
 Gem::Specification.new do |s|
   s.name        = "ey_services_api"
   s.version     = EY::ServicesAPI::VERSION
-  s.authors     = ["Thorben Schröder & Jacob Burkhart"]
-  s.email       = ["tschroder@engineyard.com"]
+  s.authors     = ["Jacob Burkhart & Thorben Schröder & David Calavera & Michael Brodhead & Others"]
+  s.email       = ["jacob@engineyard.com"]
   s.homepage    = ""
-  s.summary     = %q{public API for services}
-  s.description = %q{public API for services}
+  s.summary     = %q{API for Partner Services (talks to services.engineyard.com)}
+  s.description = %q{API for Partner Services (talks to services.engineyard.com)}
 
   s.rubyforge_project = "ey_services_api"
 

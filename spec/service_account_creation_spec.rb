@@ -6,7 +6,7 @@ describe EY::ServicesAPI::ServiceAccountCreation do
 
   describe "with a service account" do
     before do
-      @service_account_hash = @tresfiestas.create_service_account
+      @service_account_hash = @tresfiestas.service_account
       @creation_request = @tresfiestas.service_account_creation_request(@service_account_hash)
       @service_account = EY::ServicesAPI::ServiceAccountCreation.from_request(@creation_request.to_json)
     end

@@ -23,7 +23,7 @@ describe EY::ServicesAPI::Service do
 
     describe "with a registration_url" do
       before do
-        partner = @tresfiestas.create_partner
+        partner = @tresfiestas.partner
 
         @registration_url = partner[:registration_url]
         @auth_id = partner[:auth_id]

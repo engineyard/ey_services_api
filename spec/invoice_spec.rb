@@ -5,7 +5,7 @@ describe EY::ServicesAPI::Invoice do
   include_context 'tresfiestas setup'
 
   before do
-    @service_account = @tresfiestas.create_service_account
+    @service_account = @tresfiestas.service_account
     @invoices_url = @service_account[:invoices_url]
     auth_id = @service_account[:service][:partner][:auth_id]
     auth_key = @service_account[:service][:partner][:auth_key]

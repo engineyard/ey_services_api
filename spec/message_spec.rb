@@ -8,7 +8,7 @@ describe EY::ServicesAPI::Message do
   describe "#send_message" do
     describe "with a service account" do
       before do
-        @service_account = @tresfiestas.create_service_account
+        @service_account = @tresfiestas.service_account
         @messages_url = @service_account[:messages_url]
         auth_id = @service_account[:service][:partner][:auth_id]
         auth_key = @service_account[:service][:partner][:auth_key]
@@ -45,7 +45,7 @@ describe EY::ServicesAPI::Message do
 
     describe "with a provisioned service" do
       before do
-        @provisioned_service = @tresfiestas.create_provisioned_service
+        @provisioned_service = @tresfiestas.provisioned_service
         @messages_url = @provisioned_service[:messages_url]
         auth_id = @provisioned_service[:service_account][:service][:partner][:auth_id]
         auth_key = @provisioned_service[:service_account][:service][:partner][:auth_key]
