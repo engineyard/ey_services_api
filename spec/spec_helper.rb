@@ -1,16 +1,17 @@
 require 'ey_services_api'
-require 'tresfiestas/gem_integration_test'
 
 Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each {|f| require f}
 
 shared_context "tresfiestas setup" do
-  before(:all) do
-    backend = Tresfiestas::GemIntegrationTest
-    @tresfiestas = backend.setup!
-    # @tresfiestas = EY::ServicesAPI.enable_mock!
-  end
 
   before do
-    @tresfiestas.reset!
+    if ENV["BUNDLE_GEMFILE"] == "InternalGemfile"
+      require 'tresfiestas/gem_integration_test'
+      EY::ServicesAPI.enable_mock!(Tresfiestas::GemIntegrationTest)
+    else
+      EY::ServicesAPI.enable_mock!
+    end
+    @tresfiestas = EY::ServicesAPI.mock_backend
   end
+
 end

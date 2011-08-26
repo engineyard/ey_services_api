@@ -26,12 +26,9 @@ describe EY::ServicesAPI::Service do
         partner = @tresfiestas.partner
 
         @registration_url = partner[:registration_url]
-        @auth_id = partner[:auth_id]
-        @auth_key = partner[:auth_key]
 
         @registration_params = @tresfiestas.service_registration_params
 
-        EY::ServicesAPI.setup!(:auth_id => @auth_id, :auth_key => @auth_key)
         @connection = EY::ServicesAPI.connection
       end
 

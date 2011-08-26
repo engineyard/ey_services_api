@@ -20,11 +20,20 @@ module EY
       @connection or raise "Not setup!"
     end
 
-    def self.enable_mock!
-      require "ey_services_api/test/tresfiestas_fake"
-      TresfiestasFake.reset!
-      EY::ServicesAPI.connection.backend = TresfiestasFake::RackApp
-      TresfiestasFake.mock_helper
+    def self.enable_mock!(provider = nil)
+      unless @mock_backend
+        unless provider
+          require "ey_services_api/test/tresfiestas_fake"
+          provider = TresfiestasFake
+        end
+        @mock_backend = provider.setup!
+      end
+      @mock_backend.reset!
+      @mock_backend.initialize_api_connection
+    end
+
+    def self.mock_backend
+      @mock_backend
     end
 
   end

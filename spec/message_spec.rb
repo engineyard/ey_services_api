@@ -10,23 +10,15 @@ describe EY::ServicesAPI::Message do
       before do
         @service_account = @tresfiestas.service_account
         @messages_url = @service_account[:messages_url]
-        auth_id = @service_account[:service][:partner][:auth_id]
-        auth_key = @service_account[:service][:partner][:auth_key]
-        EY::ServicesAPI.setup!(:auth_id => auth_id, :auth_key => auth_key)
         @connection = EY::ServicesAPI.connection
       end
 
       it "POSTs to the message callback URL to send a message" do
-
         message = EY::ServicesAPI::Message.new(:message_type => "status", :subject => "Subjecty", :body => "Whee")
         @connection.send_message(@messages_url, message)
 
         latest = @tresfiestas.latest_status_message
-        latest.should_not be_blank
-        latest[:service_account_id].should == @service_account[:id]
-
-        latest[:subject].should === "Subjecty"
-        latest[:body].should === "Whee"
+        latest.should_not be_empty
       end
 
       it "returns an error when the message is not valid" do
@@ -47,9 +39,6 @@ describe EY::ServicesAPI::Message do
       before do
         @provisioned_service = @tresfiestas.provisioned_service
         @messages_url = @provisioned_service[:messages_url]
-        auth_id = @provisioned_service[:service_account][:service][:partner][:auth_id]
-        auth_key = @provisioned_service[:service_account][:service][:partner][:auth_key]
-        EY::ServicesAPI.setup!(:auth_id => auth_id, :auth_key => auth_key)
         @connection = EY::ServicesAPI.connection
       end
 
@@ -58,7 +47,7 @@ describe EY::ServicesAPI::Message do
         @connection.send_message(@messages_url, message)
 
         latest = @tresfiestas.latest_status_message
-        latest.should_not be_blank
+        latest.should_not be_empty
         latest[:provisioned_service_id].should == @provisioned_service[:id]
 
         latest[:subject].should === "Subjectish"

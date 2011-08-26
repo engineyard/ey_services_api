@@ -7,10 +7,6 @@ describe EY::ServicesAPI::Invoice do
   before do
     @service_account = @tresfiestas.service_account
     @invoices_url = @service_account[:invoices_url]
-    auth_id = @service_account[:service][:partner][:auth_id]
-    auth_key = @service_account[:service][:partner][:auth_key]
-
-    EY::ServicesAPI.setup!(:auth_id => auth_id, :auth_key => auth_key)
     @connection = EY::ServicesAPI.connection
   end
 
