@@ -7,13 +7,13 @@ group :test, :development do
   gem 'rake'
   gem 'ey_sso', :git => "git@github.com:engineyard/ey_sso.git"
 
-  # gem 'tresfiestas', :git => "git@github.com:engineyard/tresfiestas.git"
-  gem 'tresfiestas', :path => "../tresfiestas"
+  # For internal dev:
+  # gem 'tresfiestas', :path => "../tresfiestas"
+  # gem 'lisonja', :path => "../lisonja"
 
-  #TODO: this should just be a dep of tresfiestas
-  gem 'lisonja', :path => "../lisonja"
-  #TODO: this should just be a dep of lisonja
-  gem 'ey_services_api', :path => "../ey_services_api"
+  # For CI:
+  gem 'tresfiestas', :git => "git@github.com:engineyard/tresfiestas.git"
+  gem 'lisonja', :git => "git@github.com:engineyard/lisonja.git"
 
   gem 'sinatra'
 end
