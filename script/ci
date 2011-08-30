@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+set -x
+set -e
+export LANG=en_US.UTF-8
+
+internal_key="/home/$USER/.ssh/internal"
+
+run_mocked () {
+  gem install bundler --no-rdoc --no-ri
+  bundle
+
+  time bundle exec rake --trace
+}
+
+run_against_tresfiestas () {
+  export BUNDLE_GEMFILE=InternalGemfile
+  source use_ruby.sh
+  use_ruby 1.9.2
+
+  gem install bundler --no-rdoc --no-ri
+  bundle
+
+  time bundle exec rake --trace
+}
+
+run_mocked && run_against_tresfiestas
