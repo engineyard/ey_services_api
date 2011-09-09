@@ -5,7 +5,7 @@ This gem provides basic ability to interact with Engine Yard services. (http://s
 All operations happen on the connection.  First it must be setup.  For example:
 
 ```ruby
-EY::ServicesAPI.setup(:auth_id => "...", :auth_key => "...")
+EY::ServicesAPI.setup!(:auth_id => "...", :auth_key => "...")
 ```
 
 Then you can do things like register a new service.  For example:
