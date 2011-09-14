@@ -107,6 +107,12 @@ class TresfiestasFake
       provisioned_service_url = service_account["provisioned_services"].keys.first
       connection_to_partner.delete(provisioned_service_url)
     end
+    #TODO: tests this, put in tresfiestas too???!
+    def created_provisioned_service
+      service = TresfiestasFake.services.values.first
+      service_account = service["service_accounts"].values.first["service_account"]
+      service_account["provisioned_services"].values.first["provisioned_service"]
+    end
 
     def service_account_creation_request(service_account_hash)
       {}
