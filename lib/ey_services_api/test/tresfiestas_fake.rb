@@ -39,6 +39,11 @@ class TresfiestasFake
       }
     end
 
+    #TODO: make an equivalent in tresfiestas!
+    def connection_to_partner
+      @connection_to_partner ||= EY::ApiHMAC::BaseConnection.new(partner[:auth_id], partner[:auth_key])
+    end
+
     def service_registration_params
       {
         :name => "Mocking Bird",
@@ -56,6 +61,51 @@ class TresfiestasFake
       {:invoices_url => "#{BASE_URL}/api/1/invoices/12",
        :messages_url => "#{BASE_URL}/api/1/messages/12",
        :id => 12}
+    end
+
+    #TODO: test this!, put in tresfiestas too!
+    def create_service_account
+      service = TresfiestasFake.services.values.first
+      service_accounts_url = service['service_accounts_url']
+      post_params = {
+        :name => "my-account",
+        # :url => "TODO url",
+        :messages_url => "#{BASE_URL}/api/1/messages/???service_account_id???",
+        :invoices_url => "#{BASE_URL}/api/1/invoices/???service_account_id???",
+      }
+      connection_to_partner.post(service_accounts_url, post_params) do |json_body, location|
+        service["service_accounts"] ||= {}
+        service["service_accounts"][location] = json_body
+      end
+    end
+    #TODO: test this!, put in tresfiestas too!
+    def destroy_service_account
+      service = TresfiestasFake.services.values.first
+      service_account_url = service["service_accounts"].keys.first
+      connection_to_partner.delete(service_account_url)
+    end
+    #TODO: test this!, put in tresfiestas too!
+    def create_provisioned_service
+      service = TresfiestasFake.services.values.first
+      service_account = service["service_accounts"].values.first["service_account"]
+      provisioned_services_url = service_account["provisioned_services_url"]
+      post_params = {
+        # :url => "TODO: url",
+        :messages_url => "#{BASE_URL}/api/1/provisioned_service_messages/???provisioned_service_id???",
+        :environment => {:id => 5, :name => 'myenv'},
+        :app => {:id => 6, :name => "myapp"},
+      }
+      connection_to_partner.post(provisioned_services_url, post_params) do |json_body, location|
+        service_account["provisioned_services"] ||= {}
+        service_account["provisioned_services"][location] = json_body
+      end
+    end
+    #TODO: test this!, put in tresfiestas too!
+    def destroy_provisioned_service
+      service = TresfiestasFake.services.values.first
+      service_account = service["service_accounts"].values.first["service_account"]
+      provisioned_service_url = service_account["provisioned_services"].keys.first
+      connection_to_partner.delete(provisioned_service_url)
     end
 
     def service_account_creation_request(service_account_hash)
@@ -98,6 +148,7 @@ class TresfiestasFake
     disable :dump_errors
     disable :show_exceptions
 
+    #TODO: auth!
     post '/api/1/register_a_new_service' do
       service_id = TresfiestasFake.services.size + 100
       service = JSON.parse(request.body.read)["service"]
