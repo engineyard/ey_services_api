@@ -6,4 +6,5 @@ gemspec
 group :test, :development do
   gem 'rake'
   gem 'sinatra'
+  gem 'rcov'
 end

@@ -3,8 +3,6 @@ require 'sinatra'
 
 #TODO: support a generic message class too?
 describe EY::ServicesAPI::Message do
-  include_context 'tresfiestas setup'
-
   describe "#send_message" do
     describe "with a service account" do
       before do

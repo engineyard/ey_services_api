@@ -2,8 +2,6 @@ require 'spec_helper'
 require 'sinatra'
 
 describe EY::ServicesAPI::ServiceAccountCreation do
-  include_context 'tresfiestas setup'
-
   describe "with a service account" do
     before do
       @service_account_hash = @tresfiestas.service_account

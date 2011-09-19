@@ -2,8 +2,6 @@ require 'spec_helper'
 require 'sinatra'
 
 describe EY::ServicesAPI::Invoice do
-  include_context 'tresfiestas setup'
-
   before do
     @service_account = @tresfiestas.service_account
     @invoices_url = @service_account[:invoices_url]

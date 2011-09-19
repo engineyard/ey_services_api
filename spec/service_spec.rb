@@ -2,8 +2,6 @@ require 'spec_helper'
 require 'sinatra'
 
 describe EY::ServicesAPI::Service do
-  include_context 'tresfiestas setup'
-
   before do
     @valid_params = @tresfiestas.service_registration_params
     @service = EY::ServicesAPI::Service.new(@valid_params)
