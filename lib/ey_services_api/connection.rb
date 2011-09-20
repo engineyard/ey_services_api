@@ -10,6 +10,17 @@ module EY
         "EY-ServicesAPI/#{VERSION}"
       end
 
+      def list_services(url)
+        response = get(url) do |json_body, response_location|
+          json_body.map do |json_item|
+            service = Service.new(json_item["service"])
+            service.connection = self
+            service.url = url
+            service
+          end
+        end
+      end
+
       def register_service(registration_url, params)
         post(registration_url, :service => params) do |json_body, response_location|
           service = Service.new(params)

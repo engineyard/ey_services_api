@@ -36,6 +36,11 @@ describe EY::ServicesAPI::Service do
         service.url.should_not be_nil
       end
 
+      it "can list services" do
+        services = @connection.list_services(@registration_url)
+        services.should eq []
+      end
+
       it "can handle errors on registration" do
         lambda{ 
           @connection.register_service(@registration_url, @registration_params.merge(:name => nil))
@@ -45,6 +50,11 @@ describe EY::ServicesAPI::Service do
       describe "with a registered service" do
         before do
           @service = @connection.register_service(@registration_url, @registration_params)
+        end
+
+        it "can list services" do
+          services = @connection.list_services(@registration_url)
+          services.should eq [@service]
         end
 
         it "can fetch your service" do
