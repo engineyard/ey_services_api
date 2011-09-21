@@ -8,12 +8,16 @@ class TresfiestasFake
     @services = {}
     @invoices = []
     @status_messages = []
+    @service_accounts = {}
   end
   def self.services
     @services ||= {}
   end
   def self.invoices
     @invoices ||= []
+  end
+  def self.service_accounts
+    @service_accounts ||= {}
   end
   def self.status_messages
     @status_messages ||= []
@@ -60,7 +64,18 @@ class TresfiestasFake
     def service_account
       {:invoices_url => "#{BASE_URL}/api/1/invoices/12",
        :messages_url => "#{BASE_URL}/api/1/messages/12",
+       :url => "#{BASE_URL}/api/1/serviceaccounts/12",
        :id => 12}
+    end
+
+    def pushed_service_account
+      pushed = TresfiestasFake.service_accounts[12] || {}
+      service_account.merge({
+        :provisioned_services_url => pushed['provisioned_services_url'],
+        :configuration_url        => pushed['configuration_url'],
+        :url                      => pushed['url'],
+        :configuration_required   => pushed['configuration_required'],
+      })
     end
 
     #TODO: test this!, put in tresfiestas too!
@@ -115,7 +130,12 @@ class TresfiestasFake
     end
 
     def service_account_creation_request(service_account_hash)
-      {}
+      {
+        :url          => service_account_hash[:url],
+        :name         => service_account_hash[:name],
+        :messages_url => service_account_hash[:messages_url],
+        :invoices_url => service_account_hash[:invoices_url]
+      }
     end
 
     def provisioned_service_creation_request(service_account_hash)
@@ -153,6 +173,10 @@ class TresfiestasFake
     enable :raise_errors
     disable :dump_errors
     disable :show_exceptions
+
+    get '/api/1/register_a_new_service' do
+      TresfiestasFake.services.values.map{|v| {"service" => v }}.to_json
+    end
 
     #TODO: auth!
     post '/api/1/register_a_new_service' do
@@ -192,6 +216,12 @@ class TresfiestasFake
 
     delete '/api/1/services/:service_id' do |service_id|
       TresfiestasFake.services.delete(service_id.to_s)
+      {}.to_json
+    end
+
+    put '/api/1/serviceaccounts/12' do
+      TresfiestasFake.service_accounts ||= {}
+      TresfiestasFake.service_accounts[12] = JSON.parse(request.body.read)["service_account"]
       {}.to_json
     end
 

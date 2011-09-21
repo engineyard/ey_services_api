@@ -16,4 +16,5 @@ group :test, :development do
   gem 'ey_services_api', :path => "../ey_services_api"
 
   gem 'sinatra'
+  gem 'guard-rspec'
 end

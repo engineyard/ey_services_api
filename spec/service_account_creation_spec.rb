@@ -16,6 +16,25 @@ describe EY::ServicesAPI::ServiceAccountCreation do
       @service_account.name.should eq @creation_request[:name]
     end
 
+    describe "with a pushed service account" do
+      before do
+        @tresfiestas.pushed_service_account #make sure it's already pushed to the partner
+      end
+
+      describe "updating a service account" do
+        before do
+          @connection = EY::ServicesAPI.connection
+          @connection.update_service_account(@service_account.url, {:configuration_required => true, :configuration_url => "a different url"})
+        end
+
+        it "should work" do
+          pushed_service = @tresfiestas.pushed_service_account
+          pushed_service[:configuration_url].should eq "a different url"
+          pushed_service[:configuration_required].should eq true
+        end
+      end
+    end
+
     it "can produce a response body hash for service account creation requests" do
       response_hash = @service_account.creation_response_hash do |presenter|
         presenter.provisioned_services_url = "some provision url"

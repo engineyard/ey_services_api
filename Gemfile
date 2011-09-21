@@ -7,4 +7,5 @@ group :test, :development do
   gem 'rake'
   gem 'sinatra'
   gem 'rcov'
+  gem 'guard-rspec'
 end

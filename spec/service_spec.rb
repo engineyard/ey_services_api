@@ -22,11 +22,8 @@ describe EY::ServicesAPI::Service do
     describe "with a registration_url" do
       before do
         partner = @tresfiestas.partner
-
         @registration_url = partner[:registration_url]
-
         @registration_params = @tresfiestas.service_registration_params
-
         @connection = EY::ServicesAPI.connection
       end
 
@@ -38,7 +35,7 @@ describe EY::ServicesAPI::Service do
 
       it "can list services" do
         services = @connection.list_services(@registration_url)
-        services.should eq []
+        services.class.should eq Array
       end
 
       it "can handle errors on registration" do
@@ -54,7 +51,7 @@ describe EY::ServicesAPI::Service do
 
         it "can list services" do
           services = @connection.list_services(@registration_url)
-          services.should eq [@service]
+          services.last.should eq @service
         end
 
         it "can fetch your service" do

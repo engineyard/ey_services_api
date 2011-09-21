@@ -47,6 +47,10 @@ module EY
         delete(url)
       end
 
+      def update_service_account(url, params)
+        put(url, :service_account => params)
+      end
+
       def send_message(url, message)
         post(url, :message => message.to_hash)
       end
