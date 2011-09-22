@@ -84,11 +84,12 @@ describe EY::ServicesAPI::Service do
           }.should raise_error EY::ServicesAPI::Connection::NotFound
         end
 
-        describe "with an AWSM account id" do
-          before do
-            
-          end
+        it "can update and delete a service from the listing" do
+          services = @connection.list_services(@registration_url)
+          services.first.update(:name => "so brand new")
+          services.first.destroy
         end
+
       end
     end
   end

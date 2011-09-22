@@ -15,7 +15,7 @@ module EY
           json_body.map do |json_item|
             service = Service.new(json_item["service"])
             service.connection = self
-            service.url = url
+            service.url = json_item["service"]["url"]
             service
           end
         end

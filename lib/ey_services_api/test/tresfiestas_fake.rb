@@ -175,7 +175,11 @@ class TresfiestasFake
     disable :show_exceptions
 
     get '/api/1/register_a_new_service' do
-      TresfiestasFake.services.values.map{|v| {"service" => v }}.to_json
+      to_return = []
+      TresfiestasFake.services.each do |k, v|
+        to_return << {"service" => v.merge('url' => "#{BASE_URL}/api/1/services/#{k}") }
+      end
+      to_return.to_json
     end
 
     #TODO: auth!
