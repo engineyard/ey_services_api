@@ -29,6 +29,7 @@ class TresfiestasFake
 
   class MockHelper
     def reset!
+      TresfiestasFake.reset!
     end
     def initialize_api_connection
       EY::ServicesAPI.setup!(:auth_id => "123", :auth_key => "456")
