@@ -16,20 +16,23 @@ module EY
       @connection = Connection.new(opts[:auth_id], opts[:auth_key])
     end
 
+    def self.setup?
+      @connection
+    end
+
     def self.connection
       @connection or raise "Not setup!"
     end
 
-    def self.enable_mock!(provider = nil)
+    def self.enable_mock!(service_provider, tresfiestas = nil, awsm = nil)
       unless @mock_backend
-        unless provider
-          require "ey_services_api/test/tresfiestas_fake"
-          provider = TresfiestasFake
-        end
-        @mock_backend = provider.setup!
+        require "ey_services_fake/mock_backend"
+        @mock_backend = EyServicesFake::MockBackend.setup!(
+          :awsm => awsm,
+          :tresfiestas => tresfiestas,
+          :service_provider => service_provider)
       end
       @mock_backend.reset!
-      @mock_backend.initialize_api_connection
     end
 
     def self.mock_backend

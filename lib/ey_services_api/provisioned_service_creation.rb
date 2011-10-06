@@ -19,17 +19,6 @@ module EY
       class Environment < APIStruct.new(:id, :name, :framework_env)
       end
 
-      # def environment
-      #   debugger
-      #   Environment.new(@environment)
-      # end
-
-      def creation_response_hash
-        response_presenter = ProvisionedServiceResponse.new
-        yield response_presenter
-        response_presenter.to_hash
-      end
-
     end
   end
 end

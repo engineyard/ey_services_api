@@ -7,12 +7,6 @@ module EY
         new(json)
       end
 
-      def creation_response_hash
-        response_presenter = ServiceAccountResponse.new
-        yield response_presenter
-        response_presenter.to_hash
-      end
-
     end
   end
 end

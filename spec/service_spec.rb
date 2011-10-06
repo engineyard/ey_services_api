@@ -2,20 +2,6 @@ require 'spec_helper'
 require 'sinatra'
 
 describe EY::ServicesAPI::Service do
-  before do
-    @valid_params = @tresfiestas.service_registration_params
-    @service = EY::ServicesAPI::Service.new(@valid_params)
-  end
-
-  it "can be initialized with a hash" do
-    @service.should be_a EY::ServicesAPI::Service
-    @service.name.should eq @valid_params[:name]
-    @service.description.should eq @valid_params[:description]
-    @service.service_accounts_url.should eq @valid_params[:service_accounts_url]
-    @service.home_url.should eq @valid_params[:home_url]
-    @service.terms_and_conditions_url.should eq @valid_params[:terms_and_conditions_url]
-    @service.vars.should eq @valid_params[:vars]
-  end
 
   describe "#register_service" do
 
@@ -23,7 +9,7 @@ describe EY::ServicesAPI::Service do
       before do
         partner = @tresfiestas.partner
         @registration_url = partner[:registration_url]
-        @registration_params = @tresfiestas.service_registration_params
+        @registration_params = @tresfiestas.actor(:service_provider).registration_params
         @connection = EY::ServicesAPI.connection
       end
 
@@ -51,7 +37,7 @@ describe EY::ServicesAPI::Service do
 
         it "can list services" do
           services = @connection.list_services(@registration_url)
-          services.last.should eq @service
+          services.index(@service).should_not be_nil
         end
 
         it "can fetch your service" do

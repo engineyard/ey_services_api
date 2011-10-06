@@ -31,5 +31,5 @@ To run specs mocked:
 To run against tresfiestas codebase: (internal only)
 
  * rvm use 1.9.2
- * BUNDLE_GEMFILE=InternalGemfile bundle
- * BUNDLE_GEMFILE=InternalGemfile bundle exec rake
+ * BUNDLE_GEMFILE=EYIntegratedGemfile bundle
+ * BUNDLE_GEMFILE=EYIntegratedGemfile bundle exec rake

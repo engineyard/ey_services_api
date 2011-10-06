@@ -1,6 +1,6 @@
 module EY
   module ServicesAPI
-    class ServiceAccountResponse < Struct.new(:configuration_required, :configuration_url, :message, :provisioned_services_url, :url)
+    class ServiceAccountResponse < APIStruct.new(:configuration_required, :configuration_url, :message, :provisioned_services_url, :url)
       def to_hash
         {
           :service_account => {
