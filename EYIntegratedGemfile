@@ -7,14 +7,13 @@ group :test, :development do
   gem 'ey_services_fake'
   gem 'rake'
 
+  #private Gem deps of fake_awsm
   gem 'ey_sso', :git => "git@github.com:engineyard/ey_sso.git"
+  gem 'ey_services_api_internal', :git => "git@github.com:engineyard/ey_services_api_internal.git"
 
-  # gem 'tresfiestas', :git => "git@github.com:engineyard/tresfiestas.git"
-  gem 'tresfiestas', :path => "../tresfiestas"
-
-  gem 'fake_awsm', :path => "../tresfiestas/spike/fake_awsm"
-  #TODO: this should just be a dep of fakeawsm
-  gem 'ey_services_api_internal', :path => "../ey_services_api_internal"
+  #"reals"
+  gem 'tresfiestas', :git => "git@github.com:engineyard/tresfiestas.git"
+  gem 'fake_awsm', :git => "git@github.com:engineyard/fake_awsm.git"
 
   gem 'guard-rspec'
 end

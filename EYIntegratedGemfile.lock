@@ -1,4 +1,11 @@
 GIT
+  remote: git@github.com:engineyard/ey_services_api_internal.git
+  revision: ff77fe459747aa039aa1df384ce10674e0293e90
+  specs:
+    ey_services_api_internal (0.1.0)
+      ey_api_hmac
+
+GIT
   remote: git@github.com:engineyard/ey_sso.git
   revision: ff38d25dd74174d284f469058d63918877304b5d
   specs:
@@ -16,21 +23,21 @@ GIT
       sinatra (~> 1.0)
       uuid (~> 2.3.1)
 
-PATH
-  remote: ../ey_services_api
+GIT
+  remote: git@github.com:engineyard/fake_awsm.git
+  revision: fa49845a6eaed4da3f7e5008509804f2ccdd32c4
   specs:
-    ey_services_api (0.0.5)
-      ey_api_hmac
-      json
+    fake_awsm (0.0)
+      activerecord (= 3.0.9)
+      ey_services_api_internal
+      ey_sso
+      haml
+      sinatra
+      sqlite3
 
-PATH
-  remote: ../ey_services_api_internal
-  specs:
-    ey_services_api_internal (0.0.4.pre)
-      ey_api_hmac
-
-PATH
-  remote: ../tresfiestas
+GIT
+  remote: git@github.com:engineyard/tresfiestas.git
+  revision: e35bb600384684a3aaf50d2c0831a44cabba1d5b
   specs:
     tresfiestas (0.1.TODO)
       RedCloth
@@ -42,14 +49,11 @@ PATH
       sqlite3
 
 PATH
-  remote: ../tresfiestas/spike/fake_awsm
+  remote: ../ey_services_api
   specs:
-    fake_awsm (0.1.TODO)
-      activerecord (= 3.0.9)
-      ey_sso
-      haml
-      sinatra
-      sqlite3
+    ey_services_api (0.1.0)
+      ey_api_hmac
+      json
 
 GEM
   remote: http://rubygems.org/
