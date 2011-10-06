@@ -1,0 +1,5 @@
+v0.1.0:
+
+  * Removed creation_response_hash methods on ServiceAccountCreation and ProvisionedServiceCreation.
+    Create ServiceAccountResponse and ProvisionedServiceResponse objects directly instead.
+  * Tests depend on ey_services_fake gem.
