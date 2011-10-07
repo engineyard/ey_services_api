@@ -5,7 +5,7 @@ require "ey_services_api/version"
 Gem::Specification.new do |s|
   s.name        = "ey_services_api"
   s.version     = EY::ServicesAPI::VERSION
-  s.authors     = ["Jacob Burkhart & Thorben Schröder & David Calavera & Michael Brodhead & Others"]
+  s.authors     = ["Jacob & Thorben & David & mkb & Josh & Others"]
   s.email       = ["jacob@engineyard.com"]
   s.homepage    = ""
   s.summary     = %q{API for Partner Services (talks to services.engineyard.com)}
