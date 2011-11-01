@@ -77,11 +77,12 @@ module EyServicesFake
     def self.registration_params
       {
         :name => "Mocking Bird",
+        :label => "mocking_bird",
         :description => "a mock service",
         :service_accounts_url =>     "#{base_url}api/1/service_accounts_callback",
         :home_url =>                 "#{base_url}",
         :terms_and_conditions_url => "#{base_url}terms",
-        :vars => ["SOME_ENV_VAR", "OTHER_VAR"]
+        :vars => ["some_var", "other_var"]
       }
     end
 
@@ -102,7 +103,7 @@ module EyServicesFake
     end
     def self.service_provisioned_params
       {
-        :vars => {"SOME_ENV_VAR" => "value", "OTHER_VAR" => "blah"},
+        :vars => {"some_var" => "value", "other_var" => "blah"},
         :configuration_url => "#{base_url}sso/some_provisioned_service",
         :configuration_required => false,
         :url => "#{base_url}api/1/some_provisioned_service",
