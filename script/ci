@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+set -x
+set -e
+
+env
+
+case "$1" in
+"internal")
+  echo "running internal tests"
+   export BUNDLE_GEMFILE=EYIntegratedGemfile
+   source use_ruby.sh
+   use_ruby 1.9.2
+   ;;
+"public")
+   echo "running public tests"
+   ;;
+*)
+   echo "unknown unit $1"
+   exit 1
+   ;;
+esac
+
+gem install bundler --no-rdoc --no-ri
+time bundle install
+time bundle exec rake
+
+echo
+echo "Complete"
