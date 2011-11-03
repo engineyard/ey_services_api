@@ -78,6 +78,14 @@ module EyServicesFake
       {}.to_json
     end
 
+    put '/api/1/service_accounts/:service_account_id/provisioned_service/:provisioned_service_id' do |service_account_id, provisioned_service_id|
+      service_account = ServiceAccount.get!(service_account_id)
+      provisioned_service = service_account.provisioned_services.detect{ |ps| ps.id.to_s == provisioned_service_id.to_s}
+      atts = JSON.parse(request.body.read)["provisioned_service"]
+      provisioned_service.update_attributes(atts)
+      {}.to_json
+    end
+
     post '/api/1/partners/:partner_id/services/:service_id/service_accounts/:service_account_id/invoices' do |partner_id, service_id, service_account_id|
       invoice_params = JSON.parse(request.body.read)["invoice"]
       unless invoice_params['total_amount_cents'].is_a?(Fixnum)
