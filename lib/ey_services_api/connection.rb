@@ -31,7 +31,7 @@ module EY
       end
 
       def get_service(url)
-        response = get(url) do |json_body, response_location|
+        get(url) do |json_body, response_location|
           service = Service.new(json_body["service"])
           service.connection = self
           service.url = url
@@ -49,6 +49,10 @@ module EY
 
       def update_service_account(url, params)
         put(url, :service_account => params)
+      end
+
+      def update_provisioned_service(url, params)
+        put(url, :provisioned_service => params)
       end
 
       def send_message(url, message)

@@ -24,7 +24,22 @@ describe EY::ServicesAPI::ProvisionedServiceCreation do
         status_message[:subject].should eq "some provisioned service messages"
       end
 
-      #Note: updating a provisioned service is not possible!
+      describe "updating a provisioned service" do
+        before do
+          @connection = EY::ServicesAPI.connection
+          provisioned_service = @tresfiestas.provisioned_service
+          @connection.update_provisioned_service(provisioned_service[:url],
+                                                 :configuration_required => true,
+                                                 :configuration_url => "something else")
+        end
+
+        it "works" do
+          pushed = @tresfiestas.provisioned_service[:pushed_provisioned_service]
+          pushed[:configuration_url].should eq "something else"
+          pushed[:configuration_required].should eq true
+        end
+      end
+
     end
   end
 

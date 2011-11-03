@@ -1,5 +1,4 @@
 require 'spec_helper'
-require 'sinatra'
 
 describe EY::ServicesAPI::Service do
 
