@@ -119,5 +119,11 @@ module EyServicesFake
       EY::ServicesAPI.connection.send_message(message_url, message)
     end
 
+    def send_invoice(invoices_url, total_amount_cent, line_item_description)
+      invoice = EY::ServicesAPI::Invoice.new(:total_amount_cents => total_amount_cent,
+                                             :line_item_description => line_item_description)
+      EY::ServicesAPI.connection.send_invoice(invoices_url, invoice)
+    end
+
   end
 end

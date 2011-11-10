@@ -49,13 +49,16 @@ module EyServicesFake
     has_many :ProvisionedService, :provisioned_services, :service_account_id
     has_many :Message, :messages, :service_account_id
     belongs_to :Service, :service, :service_id
+    has_many :Invoice, :invoices, :service_account_id
   end
   class ProvisionedService < Model
     has_many :Message, :messages, :provisioned_service_id
     belongs_to :ServiceAccount, :service_account, :service_account_id
   end
   class ServiceEnablement < Model; end
-  class Invoice < Model; end
+  class Invoice < Model
+    belongs_to :ServiceAccount, :service_account, :service_account_id
+  end
   class Message < Model
     belongs_to :ServiceAccount, :service_account, :service_account_id
     belongs_to :ProvisionedService, :provisioned_service, :provisioned_service_id
