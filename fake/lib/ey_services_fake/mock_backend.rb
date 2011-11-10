@@ -147,5 +147,9 @@ module EyServicesFake
       actor(:service_provider).send_message(message_url, message_type, message_subject, message_body)
     end
 
+    def send_invoice(invoices_url, total_amount_cent, line_item_description)
+      actor(:service_provider).send_invoice(invoices_url, total_amount_cent, line_item_description)
+    end
+
   end
 end
