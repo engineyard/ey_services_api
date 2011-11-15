@@ -40,6 +40,7 @@ module EyServicesFake
       partner_object = Partner.first
       partner_object && {
         :id => partner_object.id,
+        :name => partner_object.name,
         :auth_id => partner_object.auth_id,
         :auth_key => partner_object.auth_key,
         :registration_url => URL_GEN.service_registration(partner_object),
@@ -47,7 +48,7 @@ module EyServicesFake
     end
 
     def create_partner(sso_user, partner_base_url, partner_app)
-      Partner.create(:auth_id => "123edf", :auth_key => "abc456")
+      Partner.create(:auth_id => "123edf", :auth_key => "abc456", :name => "Some-Partner")
       app.partner_connection = EY::ApiHMAC::BaseConnection.new("123edf", "abc456")
       app.partner_connection.backend = partner_app
       find_partner(sso_user)
