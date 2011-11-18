@@ -32,7 +32,7 @@ module EyServicesFake
         status 400
         {:error_messages => ["Name can't be blank"]}.to_json
       else
-        service = Service.create(service_json.merge(:partner_id => partner.id))
+        service = Service.create(service_json.merge(:partner_id => partner.id, :revenue_share => 0.3))
         status 201
         headers 'Location' => URL_GEN.service(service)
         {}.to_json
