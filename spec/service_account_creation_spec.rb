@@ -3,6 +3,70 @@ require 'sinatra'
 
 describe EY::ServicesAPI::ServiceAccountCreation do
 
+  describe "attributes given in service account creation" do
+    before do
+      class SaveThis
+        class << self
+          attr_accessor :stuff
+        end
+      end
+      EyServicesFake::MockingBirdService.service_account_creation_handler = Proc.new do
+        SaveThis.stuff = EY::ServicesAPI::ServiceAccountCreation.from_request(request.body.read)
+        {}.to_json
+      end
+    end
+    it "matches" do
+      @service_account_hash = @tresfiestas.service_account
+      service_account = SaveThis.stuff
+      service_account.name.should eq @service_account_hash[:name]
+      service_account.url.should eq @service_account_hash[:url]
+      service_account.messages_url.should eq @service_account_hash[:messages_url]
+      service_account.invoices_url.should eq @service_account_hash[:invoices_url]
+    end
+  end
+
+  describe "with all possible attributes returned" do
+    before do
+      EyServicesFake::MockingBirdService.service_account_creation_handler = Proc.new do
+        service_account = EY::ServicesAPI::ServiceAccountCreation.from_request(request.body.read)
+        EY::ServicesAPI::ServiceAccountResponse.new(
+          :provisioned_services_url => "some provinioning url",
+          :url                      => "some resource url",
+          :configuration_url        => "some configuration url",
+          :configuration_required   => "true or false",
+          :message                  => EY::ServicesAPI::Message.new(:message_type => "status", :subject => "some message or something")
+        ).to_hash.to_json
+      end
+    end
+    it "works" do
+      @service_account_hash = @tresfiestas.service_account[:pushed_service_account]
+      @service_account_hash[:configuration_required].should eq "true or false"
+      @service_account_hash[:configuration_url].should eq "some configuration url"
+      @service_account_hash[:provisioned_services_url].should eq "some provinioning url"
+      @service_account_hash[:url].should eq "some resource url"
+      status_message = @tresfiestas.latest_status_message
+      status_message.should_not be_nil
+      status_message[:subject].should eq "some message or something"
+    end
+  end
+
+  describe "with no attributes returned" do
+    before do
+      EyServicesFake::MockingBirdService.service_account_creation_handler = Proc.new do
+        EY::ServicesAPI::ServiceAccountResponse.new.to_hash.to_json
+      end
+    end
+    it "works" do
+      @service_account_hash = @tresfiestas.service_account[:pushed_service_account]
+      @service_account_hash[:configuration_required].should be_nil
+      @service_account_hash[:configuration_url].should be_nil
+      @service_account_hash[:provisioned_services_url].should be_nil
+      @service_account_hash[:url].should be_nil
+      status_message = @tresfiestas.latest_status_message
+      status_message.should be_nil
+    end
+  end
+
   describe "with a service account created" do
     before do
       @service_account_hash = @tresfiestas.service_account[:pushed_service_account]

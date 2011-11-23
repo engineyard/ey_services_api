@@ -9,7 +9,7 @@ module EY
             :configuration_url      => self.configuration_url,
             :vars                   => self.vars,
           },
-          :message                  => self.message.to_hash,
+          :message                  => self.message && self.message.to_hash,
         }
       end
     end
