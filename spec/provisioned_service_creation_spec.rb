@@ -22,6 +22,7 @@ describe EY::ServicesAPI::ProvisionedServiceCreation do
       provisioned_service.environment.id.should eq app_deployment[:environment][:id]
       provisioned_service.environment.name.should eq app_deployment[:environment][:name]
       provisioned_service.environment.framework_env.should eq app_deployment[:environment][:framework_env]
+      provisioned_service.environment.aws_region.should eq app_deployment[:environment][:aws_region]
       provisioned_service.app.id.should eq app_deployment[:app][:id]
       provisioned_service.app.name.should eq app_deployment[:app][:name]
       provisioned_service.messages_url.should eq @provisioned_service_hash[:messages_url]
@@ -35,7 +36,7 @@ describe EY::ServicesAPI::ProvisionedServiceCreation do
         EY::ServicesAPI::ProvisionedServiceResponse.new(
           :url                    => "some url",
           :vars                   => {'some_key' => "some value"},
-          :configuration_required => "true or false",
+          :configuration_required => true,
           :configuration_url      => "some configuration url",
           :message                => EY::ServicesAPI::Message.new(:message_type => "status", :subject => "some provisioned service message or something")
         ).to_hash.to_json
@@ -45,7 +46,7 @@ describe EY::ServicesAPI::ProvisionedServiceCreation do
       @pushed_provisioned_service = @tresfiestas.provisioned_service[:pushed_provisioned_service]
       @pushed_provisioned_service[:url].should eq "some url"
       @pushed_provisioned_service[:vars].should eq({'some_key' => "some value"})
-      @pushed_provisioned_service[:configuration_required].should eq "true or false"
+      @pushed_provisioned_service[:configuration_required].should eq true
       @pushed_provisioned_service[:configuration_url].should eq "some configuration url"
       status_message = @tresfiestas.latest_status_message
       status_message.should_not be_nil
@@ -66,6 +67,25 @@ describe EY::ServicesAPI::ProvisionedServiceCreation do
       @pushed_provisioned_service[:vars].should be_nil
       @pushed_provisioned_service[:configuration_required].should be_nil
       @pushed_provisioned_service[:configuration_url].should be_nil
+    end
+  end
+
+  describe "rejecting the provisioning request gracefully" do
+    before do
+      EyServicesFake::MockingBirdService.service_provisioning_handler = Proc.new do
+        status 400
+        {:error_messages => ["This service is not currently supported in us-west"]}.to_json
+      end
+    end
+    it "works" do
+      raised_error = nil
+      begin
+        @tresfiestas.provisioned_service
+      rescue EY::ApiHMAC::BaseConnection::ValidationError => e
+        raised_error = e
+      end
+      raised_error.should_not be_nil
+      raised_error.error_messages.should eq ["This service is not currently supported in us-west"]
     end
   end
 

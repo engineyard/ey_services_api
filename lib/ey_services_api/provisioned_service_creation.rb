@@ -16,7 +16,7 @@ module EY
       class App < APIStruct.new(:id, :name)
       end
 
-      class Environment < APIStruct.new(:id, :name, :framework_env)
+      class Environment < APIStruct.new(:id, :name, :framework_env, :aws_region)
       end
 
     end

@@ -33,14 +33,14 @@ describe EY::ServicesAPI::ServiceAccountCreation do
           :provisioned_services_url => "some provinioning url",
           :url                      => "some resource url",
           :configuration_url        => "some configuration url",
-          :configuration_required   => "true or false",
+          :configuration_required   => true,
           :message                  => EY::ServicesAPI::Message.new(:message_type => "status", :subject => "some message or something")
         ).to_hash.to_json
       end
     end
     it "works" do
       @service_account_hash = @tresfiestas.service_account[:pushed_service_account]
-      @service_account_hash[:configuration_required].should eq "true or false"
+      @service_account_hash[:configuration_required].should eq true
       @service_account_hash[:configuration_url].should eq "some configuration url"
       @service_account_hash[:provisioned_services_url].should eq "some provinioning url"
       @service_account_hash[:url].should eq "some resource url"
@@ -64,6 +64,25 @@ describe EY::ServicesAPI::ServiceAccountCreation do
       @service_account_hash[:url].should be_nil
       status_message = @tresfiestas.latest_status_message
       status_message.should be_nil
+    end
+  end
+
+  describe "rejecting the creation request gracefully" do
+    before do
+      EyServicesFake::MockingBirdService.service_account_creation_handler = Proc.new do
+        status 400
+        {:error_messages => ["This service is not currently supported for trial customers"]}.to_json
+      end
+    end
+    it "works" do
+      raised_error = nil
+      begin
+        @tresfiestas.service_account
+      rescue EY::ApiHMAC::BaseConnection::ValidationError => e
+        raised_error = e
+      end
+      raised_error.should_not be_nil
+      raised_error.error_messages.should eq ["This service is not currently supported for trial customers"]
     end
   end
 
