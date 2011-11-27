@@ -66,17 +66,20 @@ module EyServicesFake
       app_deployment && {
         :id => app_deployment.id,
         :app => {
+          :id => app_deployment.app.id,
           :name => app_deployment.app.name,
         },
         :environment => {
+          :id => app_deployment.environment.id,
           :name => app_deployment.environment.name,
           :framework_env => app_deployment.environment.framework_env,
+          :aws_region => app_deployment.environment.aws_region
         }
       }
     end
     def create_app_deployment(sso_account_id, app_name, env_name, framework_env)
       app = App.create(:name => app_name)
-      env = Environment.create(:name => env_name, :framework_env => framework_env)
+      env = Environment.create(:name => env_name, :framework_env => framework_env, :aws_region => 'us-east-1')
       AppDeployment.create(:account_id => sso_account_id, :app_id => app.id, :environment_id => env.id)
     end
 
@@ -96,10 +99,12 @@ module EyServicesFake
       }
       @connection.post(service.service_accounts_url, creation_attributes) do |result, location|
         service_account.active = true
-        service_account.provisioned_services_url = result["service_account"]['provisioned_services_url']
-        service_account.configuration_url = result["service_account"]['configuration_url']
-        service_account.url = result["service_account"]['url']
-        service_account.configuration_required = result["service_account"]['configuration_required']
+        if result["service_account"]
+          service_account.provisioned_services_url = result["service_account"]['provisioned_services_url']
+          service_account.configuration_url = result["service_account"]['configuration_url']
+          service_account.url = result["service_account"]['url']
+          service_account.configuration_required = result["service_account"]['configuration_required']
+        end
         if result["message"] && result["message"]["message_type"]
           Message.create(
             :service_account_id => service_account.id,
@@ -127,20 +132,22 @@ module EyServicesFake
         :url          => url_gen.partner_provisioned_service(service_account_object, provisioned_service),
         :messages_url => url_gen.messages(service_account_object.service, service_account_object, provisioned_service),
         :app          => {:id => app.id, :name => app.name},
-        :environment  => {:id => environment.id, :name => environment.name, :framework_env => environment.framework_env},
+        :environment  => {:id => environment.id, :name => environment.name, :framework_env => environment.framework_env, :aws_region => environment.aws_region},
       }
       @connection.post(service_account_object.provisioned_services_url, provision_attribtues) do |result, location|
         provisioned_service.active = true
-        provisioned_service.vars = result['provisioned_service']["vars"]
-        provisioned_service.configuration_url = result['provisioned_service']["configuration_url"]
-        provisioned_service.configuration_required = result['provisioned_service']["configuration_required"]
-        provisioned_service.url = result['provisioned_service']["url"]
-        if result["message"] && result["message"]["message_type"]
-          Message.create(
-            :provisioned_service_id => provisioned_service.id,
-            :message_type => result["message"]["message_type"],
-            :subject => result["message"]["subject"],
-            :body => result["message"]["body"])
+        if result['provisioned_service']
+          provisioned_service.vars = result['provisioned_service']["vars"]
+          provisioned_service.configuration_url = result['provisioned_service']["configuration_url"]
+          provisioned_service.configuration_required = result['provisioned_service']["configuration_required"]
+          provisioned_service.url = result['provisioned_service']["url"]
+          if result["message"] && result["message"]["message_type"]
+            Message.create(
+              :provisioned_service_id => provisioned_service.id,
+              :message_type => result["message"]["message_type"],
+              :subject => result["message"]["subject"],
+              :body => result["message"]["body"])
+          end
         end
         provisioned_service.save
       end

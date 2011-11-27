@@ -16,27 +16,35 @@ module EyServicesFake
       end
 
       post '/api/1/service_accounts_callback' do
-        service_account = EY::ServicesAPI::ServiceAccountCreation.from_request(request.body.read)
-        standard_response_params = MockingBirdService.service_account_creation_params
-        EY::ServicesAPI::ServiceAccountResponse.new(
-          :provisioned_services_url => standard_response_params[:provisioned_services_url],
-          :url                      => standard_response_params[:url],
-          :configuration_url        => standard_response_params[:configuration_url],
-          :configuration_required   => standard_response_params[:configuration_required],
-          :message                  => EY::ServicesAPI::Message.new(:message_type => "status", :subject => "some messages")
-        ).to_hash.to_json
+        if MockingBirdService.service_account_creation_handler
+          instance_eval(&MockingBirdService.service_account_creation_handler)
+        else
+          service_account = EY::ServicesAPI::ServiceAccountCreation.from_request(request.body.read)
+          standard_response_params = MockingBirdService.service_account_creation_params
+          EY::ServicesAPI::ServiceAccountResponse.new(
+            :provisioned_services_url => standard_response_params[:provisioned_services_url],
+            :url                      => standard_response_params[:url],
+            :configuration_url        => standard_response_params[:configuration_url],
+            :configuration_required   => standard_response_params[:configuration_required],
+            :message                  => EY::ServicesAPI::Message.new(:message_type => "status", :subject => "some messages")
+          ).to_hash.to_json
+        end
       end
 
       post '/api/1/provisioned_services_callback' do
-        provisioned_service = EY::ServicesAPI::ProvisionedServiceCreation.from_request(request.body.read)
-        standard_response_params = MockingBirdService.service_provisioned_params
-        EY::ServicesAPI::ProvisionedServiceResponse.new(
-          :url                    => standard_response_params[:url],
-          :vars                   => standard_response_params[:vars],
-          :configuration_required => false,
-          :configuration_url      => standard_response_params[:configuration_url],
-          :message                => EY::ServicesAPI::Message.new(:message_type => "status", :subject => "some provisioned service messages")
-        ).to_hash.to_json
+        if MockingBirdService.service_provisioning_handler
+          instance_eval(&MockingBirdService.service_provisioning_handler)
+        else
+          provisioned_service = EY::ServicesAPI::ProvisionedServiceCreation.from_request(request.body.read)
+          standard_response_params = MockingBirdService.service_provisioned_params
+          EY::ServicesAPI::ProvisionedServiceResponse.new(
+            :url                    => standard_response_params[:url],
+            :vars                   => standard_response_params[:vars],
+            :configuration_required => false,
+            :configuration_url      => standard_response_params[:configuration_url],
+            :message                => EY::ServicesAPI::Message.new(:message_type => "status", :subject => "some provisioned service messages")
+          ).to_hash.to_json
+        end
       end
 
       get '/sso/some_service_account' do
@@ -48,8 +56,14 @@ module EyServicesFake
       end
     end
 
+    class << self
+      attr_accessor :service_account_creation_handler
+      attr_accessor :service_provisioning_handler
+    end
+
     def reset!
-      #no-op
+      MockingBirdService.service_account_creation_handler = nil
+      MockingBirdService.service_provisioning_handler = nil
     end
 
     def app
