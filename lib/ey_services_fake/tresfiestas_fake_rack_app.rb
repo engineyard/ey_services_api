@@ -108,8 +108,7 @@ module EyServicesFake
       message_params = JSON.parse(request.body.read)["message"]
       message_type = message_params['message_type']
       subject = message_params['subject']
-      body = message_params['body']
-      
+
       if subject.to_s.empty?
         status 400
         return {:error_messages => ["Subject can't be blank."]}.to_json
@@ -122,20 +121,18 @@ module EyServicesFake
 
       service_account = ServiceAccount.get(service_account_id)
       message = Message.create(message_params.merge(:service_account_id => service_account.id))
-      self.class.awsm_connection.post(service_account.dashboard_notifications_url, {
-        :notification => {:subject => subject, :body => body},
-        :message_type => message_type,
-        :configuration_possible => !!service_account.configuration_url,
-        :service_name => service_account.service.name,
-        :service_id => service_account.service_id})
+      forward_service_account_message_to_awsm(service_account, message)
       {}.to_json
+    end
+
+    def forward_service_account_message_to_awsm(service_account, message)
+      #no-op
     end
 
     post '/api/1/partners/:partner_id/services/:service_id/service_accounts/:service_account_id/provisioned_service/:provisioned_service_id/messages' do |partner_id, service_id, service_account_id, provisioned_service_id|
       message_params = JSON.parse(request.body.read)["message"]
       subject = message_params['subject']
       message_type = message_params['message_type']
-      body = message_params['body']
 
       if subject.to_s.empty?
         status 400
@@ -151,13 +148,12 @@ module EyServicesFake
       provisioned_service = ProvisionedService.get(provisioned_service_id)
       service_account = provisioned_service.service_account
       message = Message.create(message_params.merge(:provisioned_service_id => provisioned_service.id))
-      self.class.awsm_connection.post(provisioned_service.dashboard_notifications_url, {
-        :notification => {:subject => subject, :body => body},
-        :message_type => message_type,
-        :configuration_possible => !!provisioned_service.configuration_url,
-        :service_name => service_account.service.name,
-        :provisionable_service_id => provisioned_service.id})
+      forward_provisioned_service_message_to_awsm(provisioned_service, message)
       {}.to_json
+    end
+
+    def forward_provisioned_service_message_to_awsm(provisioned_service, message)
+      #no-op
     end
 
   end
