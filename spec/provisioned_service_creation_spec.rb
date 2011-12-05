@@ -25,7 +25,7 @@ describe EY::ServicesAPI::ProvisionedServiceCreation do
       provisioned_service.environment.aws_region.should eq app_deployment[:environment][:aws_region]
       provisioned_service.app.id.should eq app_deployment[:app][:id]
       provisioned_service.app.name.should eq app_deployment[:app][:name]
-      provisioned_service.messages_url.should eq @provisioned_service_hash[:messages_url]
+      URI.parse(provisioned_service.messages_url).path.should eq URI.parse(@provisioned_service_hash[:messages_url]).path
     end
   end
 

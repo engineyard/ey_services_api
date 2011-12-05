@@ -36,11 +36,12 @@ describe EY::ServicesAPI::Service do
 
         it "can list services" do
           services = @connection.list_services(@registration_url)
-          services.index(@service).should_not be_nil
+          services.first.name.should eq @service.name
         end
 
         it "can fetch your service" do
           fetched_service = @connection.get_service(@service.url)
+          fetched_service.description = fetched_service.description.gsub(/<[^>]*>/,"")
           fetched_service.should eq @service
         end
 
