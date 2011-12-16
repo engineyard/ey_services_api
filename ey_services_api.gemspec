@@ -20,5 +20,5 @@ Gem::Specification.new do |s|
   
   s.add_development_dependency 'rspec'
   s.add_dependency 'json'
-  s.add_dependency 'ey_api_hmac', ">= 0.1.0"
+  s.add_dependency 'ey_api_hmac', ">= 0.3.0"
 end

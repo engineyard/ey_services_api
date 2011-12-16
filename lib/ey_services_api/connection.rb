@@ -4,7 +4,7 @@ require 'ey_api_hmac'
 
 module EY
   module ServicesAPI
-    class Connection < EY::ApiHMAC::BaseConnection
+    class Connection < EY::ApiHMAC::AuthedConnection
 
       def default_user_agent
         "EY-ServicesAPI/#{VERSION}"

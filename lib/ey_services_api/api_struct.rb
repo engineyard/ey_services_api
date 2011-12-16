@@ -1,6 +1,9 @@
 class APIStruct < Struct
+  attr_reader :raw
+
   def initialize(atts = {})
     #converting all keys of atts to Symbols
+    @raw = atts
     atts = Hash[atts.map {|k,v| [k.to_sym, v]}]
     super(*atts.values_at(*self.members.map(&:to_sym)))
   end
