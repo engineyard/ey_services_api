@@ -31,7 +31,7 @@ module EyServicesFake
 
     def create_awsm(awsm_base_url, awsm_app)
       Awsm.create(:auth_id => "789eef", :auth_key => "009abb")
-      app.awsm_connection = EY::ApiHMAC::BaseConnection.new("789eef", "009abb")
+      app.awsm_connection = EY::ApiHMAC::AuthedConnection.new("789eef", "009abb")
       app.awsm_connection.backend = awsm_app
       find_awsm
     end
@@ -49,7 +49,7 @@ module EyServicesFake
 
     def create_partner(sso_user, partner_base_url, partner_app)
       Partner.create(:auth_id => "123edf", :auth_key => "abc456", :name => "Some-Partner")
-      app.partner_connection = EY::ApiHMAC::BaseConnection.new("123edf", "abc456")
+      app.partner_connection = EY::ApiHMAC::AuthedConnection.new("123edf", "abc456")
       app.partner_connection.backend = partner_app
       find_partner(sso_user)
     end
