@@ -38,7 +38,7 @@ module EyServicesFake
     end
 
     def service_provider_setup(auth_id, auth_key, service_provider_url, service_provider_rackapp)
-      @connection = EY::ApiHMAC::BaseConnection.new(auth_id, auth_key).tap{|c| c.backend = service_provider_rackapp}
+      @connection = EY::ApiHMAC::AuthedConnection.new(auth_id, auth_key).tap{|c| c.backend = service_provider_rackapp}
     end
     def setup(auth_id, auth_key, tresfiestas_url, tresfiestas_rackapp)
       #ignored... we don't talk to tresfiestas, we talk to service_provider
