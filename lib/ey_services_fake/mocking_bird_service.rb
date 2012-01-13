@@ -8,11 +8,19 @@ module EyServicesFake
       disable :show_exceptions
 
       delete '/api/1/some_provisioned_service' do
-        {}.to_json
+        if MockingBirdService.service_deprovisioning_handler
+          instance_eval(&MockingBirdService.service_deprovisioning_handler)
+        else
+          {}.to_json
+        end
       end
 
       delete '/api/1/some_service_account' do
-        {}.to_json
+        if MockingBirdService.service_account_cancel_handler
+          instance_eval(&MockingBirdService.service_account_cancel_handler)
+        else
+          {}.to_json
+        end
       end
 
       post '/api/1/service_accounts_callback' do
@@ -59,11 +67,15 @@ module EyServicesFake
     class << self
       attr_accessor :service_account_creation_handler
       attr_accessor :service_provisioning_handler
+      attr_accessor :service_deprovisioning_handler
+      attr_accessor :service_account_cancel_handler
     end
 
     def reset!
       MockingBirdService.service_account_creation_handler = nil
       MockingBirdService.service_provisioning_handler = nil
+      MockingBirdService.service_deprovisioning_handler = nil
+      MockingBirdService.service_account_cancel_handler = nil
     end
 
     def app
