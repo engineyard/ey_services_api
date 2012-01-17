@@ -65,6 +65,9 @@ module EyServicesFake
         actor(:service_provider).register_service(partner_hash[:registration_url])
         service_hash = actor(:tresfiestas).find_service(partner_hash[:id])
       end
+      if actor(:tresfiestas).respond_to?(:document_service)
+        service_hash.merge!(:service_doc => actor(:tresfiestas).document_service(service_hash[:id]))
+      end
       service_hash.merge(:partner => partner_hash)
     end
 
