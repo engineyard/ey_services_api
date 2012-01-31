@@ -67,16 +67,16 @@ module EyServicesFake
     end
 
     def service_available_for_account?(service_id, sso_account_id)
-      Service.get(service_id).service_enablements.first(:sso_account_id => sso_account_id)
+      Service.get(service_id).service_enablements.first(:sso_account_id => sso_account_id.to_s)
     end
 
     def make_service_available_for_account(service_id, sso_account_id)
-      ServiceEnablement.create(:service_id => service_id.to_i, :sso_account_id => sso_account_id.to_i, :reason => "test")
+      ServiceEnablement.create(:service_id => service_id.to_i, :sso_account_id => sso_account_id.to_s, :reason => "test")
     end
 
     def find_service_account(service_id, sso_account_id)
       service_object = Service.get(service_id)
-      service_account_object = service_object.service_accounts.first(:sso_account_id => sso_account_id)
+      service_account_object = service_object.service_accounts.first(:sso_account_id => sso_account_id.to_s)
       service_account_object && {
         :id             => service_account_object.id,
         :url            => URL_GEN.partner_service_account(service_object, service_account_object),
