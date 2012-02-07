@@ -5,6 +5,13 @@ module EyServicesFake
     def self.inherited(klass)
       decendants << klass
     end
+    class << self
+      attr_accessor :current_id
+    end
+    self.current_id = 0
+    def self.next_id
+      Model.current_id += 1
+    end
     def self.nuke_all
       decendants.map(&:nuke)
     end
