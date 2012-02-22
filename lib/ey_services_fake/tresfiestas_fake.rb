@@ -70,8 +70,8 @@ module EyServicesFake
       Service.get(service_id).service_enablements.first(:sso_account_id => sso_account_id.to_s)
     end
 
-    def make_service_available_for_account(service_id, sso_account_id)
-      ServiceEnablement.create(:service_id => service_id.to_i, :sso_account_id => sso_account_id.to_s, :reason => "test")
+    def make_service_available_for_account(service_id, sso_account_id, reason = "test")
+      ServiceEnablement.create(:service_id => service_id.to_i, :sso_account_id => sso_account_id.to_s, :reason => reason)
     end
 
     def find_service_account(service_id, sso_account_id)
