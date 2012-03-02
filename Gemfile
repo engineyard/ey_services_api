@@ -4,7 +4,7 @@ source "http://rubygems.org"
 gemspec
 
 group :test, :development do
-  gem 'ey_services_fake'
+  gemspec :path => "fake"
 
   gem 'rake'
   gem 'guard-rspec'
