@@ -7,7 +7,7 @@ Gem::Specification.new do |s|
   s.version     = EY::ServicesAPI::VERSION
   s.authors     = ["Jacob & Thorben & David & mkb & Josh & Others"]
   s.email       = ["jacob@engineyard.com"]
-  s.homepage    = ""
+  s.homepage    = "https://github.com/engineyard/ey_services_api"
   s.summary     = %q{API for Partner Services (talks to services.engineyard.com)}
   s.description = %q{API for Partner Services (talks to services.engineyard.com)}
 

@@ -7,7 +7,7 @@ Gem::Specification.new do |s|
   s.version     = EyServicesFake::VERSION
   s.authors     = ["Jacob Burkhart & Josh Lane"]
   s.email       = ["jacob@engineyard.com"]
-  s.homepage    = ""
+  s.homepage    = "https://github.com/engineyard/ey_services_api"
   s.summary     = %q{A fake for use when writting tests against the ey_services_api}
   s.description = %q{A fake for use when writting tests against the ey_services_api}
 
