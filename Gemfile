@@ -7,6 +7,5 @@ group :test, :development do
   gem 'ey_services_fake'
 
   gem 'rake'
-  gem 'rcov'
   gem 'guard-rspec'
 end
