@@ -1,4 +1,5 @@
-require 'spec_helper'
+#because there may be multiple 'spec_helper' in load path when running from external test helper
+require File.expand_path('../spec_helper.rb', __FILE__)
 
 describe EY::ServicesAPI::Service do
 
