@@ -20,6 +20,16 @@ EY::ServicesAPI.connection.register_service(
     :vars => ["MY_SERVICE_API_KEY"] })
 ```
 
+# Using this gem in your project
+
+This codebase really contains 2 gems:
+
+ * ey_services_api is the Gem for communicating with services.engineyard.com. Include this in your Gemfile.
+ * ey_services_fake is a Gem for helping you to write tests with a working "Fake" in place of talking directly to services.engineyard.com.  Include this in your Gemfile inside the "test" group.
+
+For examples of using the gem in a sinatra app, and in tests see: https://github.com/engineyard/chronatog
+
+
 ## To run the tests
 
 To run specs mocked:
