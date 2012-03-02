@@ -8,9 +8,6 @@ case "$1" in
 "internal")
    echo "running internal tests"
    export BUNDLE_GEMFILE=EYIntegratedGemfile
-   export LANG="en_US.utf-8"
-   source use_ruby.sh
-   use_ruby 1.9.2
    ;;
 "public")
    echo "running public tests"
