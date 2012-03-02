@@ -46,11 +46,11 @@ To run against tresfiestas codebase: (internal only)
 
 ## Releasing
 
-$ rvm use 1.8.7
-$ gem install gem-release
-$ gem bump
-$ gem release
-$ git push
+    $ rvm use 1.8.7
+    $ gem install gem-release
+    $ gem bump
+    $ gem release
+    $ git push
 
 This should bump the versions of both ey_services_api and ey_services_fake. Push both to rubygems, and then push your version bump commits to github.
 
