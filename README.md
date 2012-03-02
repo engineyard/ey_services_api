@@ -33,3 +33,15 @@ To run against tresfiestas codebase: (internal only)
  * rvm use 1.9.2
  * BUNDLE_GEMFILE=EYIntegratedGemfile bundle
  * BUNDLE_GEMFILE=EYIntegratedGemfile bundle exec rake
+
+## Releasing
+
+$ rvm use 1.8.7
+$ gem install gem-release
+$ gem bump
+$ gem release
+$ git push
+
+This should bump the versions of both ey_services_api and ey_services_fake. Push both to rubygems, and then push your version bump commits to github.
+
+Using 1.8.7 to release is the simplest way to avoid syck/psych yaml incompatibilities gemspec bugs.
