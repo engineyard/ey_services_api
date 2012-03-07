@@ -1,4 +1,7 @@
 source "http://rubygems.org"
+internal_gem_server = ENV["EY_INTERNAL_GEM_SERVER"] || `gem sources | grep gems-internal.engineyard.com`.strip
+source internal_gem_server
+
 
 # Specify your gem's dependencies in ey_services_api.gemspec
 gemspec
