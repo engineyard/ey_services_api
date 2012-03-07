@@ -9,7 +9,7 @@ group :test, :development do
 
   #private Gem deps of fake_awsm
   gem 'ey_sso', :git => "git@github.com:engineyard/ey_sso.git"
-  gem 'ey_services_api_internal', :git => "git@github.com:engineyard/ey_services_api_internal.git"
+  gem 'ey_services_api_internal'
 
   #"reals"
   gem 'tresfiestas', :git => "git@github.com:engineyard/tresfiestas.git"
