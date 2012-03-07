@@ -1,5 +1,5 @@
 source "http://rubygems.org"
-internal_gem_server = ENV["EY_INTERNAL_GEM_SERVER"] || `gem sources | grep gems-internal.engineyard.com`.strip
+internal_gem_server = ENV["EY_INTERNAL_GEM_SERVER"] ||= `gem sources | grep gems-internal.engineyard.com`.strip
 source internal_gem_server
 
 
@@ -9,10 +9,6 @@ gemspec
 group :test, :development do
   gemspec :path => "fake"
   gem 'rake'
-
-  #private Gem deps of fake_awsm
-  gem 'ey_sso', :git => "git@github.com:engineyard/ey_sso.git"
-  gem 'ey_services_api_internal'
 
   #"reals"
   gem 'tresfiestas', :git => "git@github.com:engineyard/tresfiestas.git"
