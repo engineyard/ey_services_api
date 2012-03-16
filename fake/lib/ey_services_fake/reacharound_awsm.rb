@@ -12,6 +12,10 @@ module EyServicesFake
         {}.to_json
       end
 
+      get '/dashboard' do
+        "Hello this is fake AWSM dashboard"
+      end
+
     end
 
     def app

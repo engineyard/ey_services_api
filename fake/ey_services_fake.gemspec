@@ -20,4 +20,5 @@ Gem::Specification.new do |s|
 
   s.add_dependency "sinatra"
   s.add_dependency "cubbyhole", ">= 0.2.0"
+  s.add_dependency "request_visualizer"
 end

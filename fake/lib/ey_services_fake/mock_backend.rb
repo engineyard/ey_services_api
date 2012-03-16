@@ -21,6 +21,43 @@ module EyServicesFake
       new(actors)
     end
 
+    def app_for(actor_name)
+      this = self
+      @apps ||= {}
+      @apps[actor_name] ||= Rack::Builder.new do
+        this.actors.each do |k, actor|
+          if actor.respond_to?(:extra_middlewares)
+            self.instance_eval(&actor.extra_middlewares)
+          end
+        end
+        if ENV["REQUEST_DEBUG"]
+          require 'request_visualizer'
+          use RequestVisualizer do |str|
+            found = str
+            this.actors.each do |k, actor|
+              if str.match(actor.base_url)
+                found = k.to_s
+              end
+            end
+            found
+          end
+        end
+        run this.actors[actor_name].app
+      end
+    end
+
+    def app
+      this = self
+      @app ||= Rack::Builder.new do
+        this.actors.each do |k, actor|
+          map "#{actor.base_url}/" do
+            run this.app_for(k)
+          end
+        end
+      end
+    end
+
+    attr_reader :actors
     def initialize(actors)
       @actors = actors
     end
@@ -38,8 +75,8 @@ module EyServicesFake
     def awsm
       awsm_hash = actor(:tresfiestas).find_awsm
       unless awsm_hash
-        awsm_hash = actor(:tresfiestas).create_awsm(actor(:awsm).base_url, actor(:awsm).app)
-        actor(:awsm).setup(awsm_hash[:auth_id], awsm_hash[:auth_key], actor(:tresfiestas).base_url, actor(:tresfiestas).app)
+        awsm_hash = actor(:tresfiestas).create_awsm(actor(:awsm).base_url, app_for(:awsm))
+        actor(:awsm).setup(awsm_hash[:auth_id], awsm_hash[:auth_key], actor(:tresfiestas).base_url, app_for(:tresfiestas))
       end
       awsm_hash
     end
@@ -47,13 +84,13 @@ module EyServicesFake
     def partner
       partner_hash = actor(:tresfiestas).find_partner(sso_user)
       unless partner_hash
-        partner_hash = actor(:tresfiestas).create_partner(sso_user, actor(:service_provider).base_url, actor(:service_provider).app)
+        partner_hash = actor(:tresfiestas).create_partner(sso_user, actor(:service_provider).base_url, app_for(:service_provider))
         @actors.values.each do |actor|
           if actor.respond_to?(:service_provider_setup)
-            actor.service_provider_setup(partner_hash[:auth_id], partner_hash[:auth_key], actor(:service_provider).base_url, actor(:service_provider).app)
+            actor.service_provider_setup(partner_hash[:auth_id], partner_hash[:auth_key], actor(:service_provider).base_url, app_for(:service_provider))
           end
         end
-        actor(:service_provider).setup(partner_hash[:auth_id], partner_hash[:auth_key], actor(:tresfiestas).base_url, actor(:tresfiestas).app)
+        actor(:service_provider).setup(partner_hash[:auth_id], partner_hash[:auth_key], actor(:tresfiestas).base_url, app_for(:tresfiestas))
       end
       partner_hash
     end

@@ -26,6 +26,7 @@ module EY
 
     def self.enable_mock!(service_provider, tresfiestas = nil, awsm = nil)
       unless @mock_backend
+        #TODO: rescue load error and log the need to include ey_services_fake gem
         require "ey_services_fake/mock_backend"
         @mock_backend = EyServicesFake::MockBackend.setup!(
           :awsm => awsm,
