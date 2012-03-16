@@ -191,5 +191,20 @@ module EyServicesFake
       actor(:service_provider).send_invoice(invoices_url, total_amount_cent, line_item_description)
     end
 
+    def service_account_sso_url
+      configuration_url = service_account[:pushed_service_account][:configuration_url]
+      params = {
+        'timestamp' => Time.now.iso8601,
+        'ey_user_id' => sso_user.id,
+        'ey_user_name' => "Person Name",
+        'ey_return_to_url' => "https://cloud.engineyard.com/dashboard",
+        'access_level' => 'owner',
+      }
+      EY::ApiHMAC::SSO.sign(configuration_url,
+                            params,
+                            partner[:auth_id],
+                            partner[:auth_key])
+    end
+
   end
 end
