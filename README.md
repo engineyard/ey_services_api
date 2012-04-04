@@ -1,24 +1,20 @@
 # EY Services API
 
-This gem provides basic ability to interact with Engine Yard as a service partner (e.g. http://www.engineyard.com/partners/platform-services).
+This gem provides basic ability to interact with Engine Yard as a service partner (e.g. [http://www.engineyard.com/partners/platform-services](http://www.engineyard.com/partners/platform-services)).
 
 All operations happen on the connection.  First it must be setup.  For example:
 
-```ruby
-EY::ServicesAPI.setup(:auth_id => "...", :auth_key => "...")
-```
+    EY::ServicesAPI.setup(:auth_id => "...", :auth_key => "...")
 
 Then you can do things like register a new service.  For example:
 
-```ruby
-EY::ServicesAPI.connection.register_service(
-  "http://services.engineyard.com/api/1/partners/1/services", {
-    :name => "My Service", 
-    :description => "my service does things", 
-    :service_accounts_url => "http://my-service.example.com/api/1/customers/fancy",
-    :home_url => "http://my-service.example.com/",
-    :vars => ["MY_SERVICE_API_KEY"] })
-```
+    EY::ServicesAPI.connection.register_service(
+      "http://services.engineyard.com/api/1/partners/1/services", {
+        :name => "My Service", 
+        :description => "my service does things", 
+        :service_accounts_url => "http://my-service.example.com/api/1/customers/fancy",
+        :home_url => "http://my-service.example.com/",
+        :vars => ["MY_SERVICE_API_KEY"] })
 
 # Using this gem in your project
 
