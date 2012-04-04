@@ -1,6 +1,6 @@
 # EY Services API
 
-This gem provides basic ability to interact with Engine Yard services. (http://services.engineyard.com/)
+This gem provides basic ability to interact with Engine Yard as a service partner (e.g. http://www.engineyard.com/partners/platform-services).
 
 All operations happen on the connection.  First it must be setup.  For example:
 
