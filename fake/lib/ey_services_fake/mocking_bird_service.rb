@@ -2,33 +2,42 @@ require 'sinatra/base'
 
 module EyServicesFake
   class MockingBirdService
-    class Application < Sinatra::Base
+
+    def self.implement_the_app(app)
+      app.class_eval do
       enable :raise_errors
       disable :dump_errors
       disable :show_exceptions
 
+      class << self
+        attr_accessor :parent
+      end
+      def parent
+        self.class.parent
+      end
+
       delete '/api/1/some_provisioned_service' do
-        if MockingBirdService.service_deprovisioning_handler
-          instance_eval(&MockingBirdService.service_deprovisioning_handler)
+        if parent.service_deprovisioning_handler
+          instance_eval(&parent.service_deprovisioning_handler)
         else
           {}.to_json
         end
       end
 
       delete '/api/1/some_service_account' do
-        if MockingBirdService.service_account_cancel_handler
-          instance_eval(&MockingBirdService.service_account_cancel_handler)
+        if parent.service_account_cancel_handler
+          instance_eval(&parent.service_account_cancel_handler)
         else
           {}.to_json
         end
       end
 
       post '/api/1/service_accounts_callback' do
-        if MockingBirdService.service_account_creation_handler
-          instance_eval(&MockingBirdService.service_account_creation_handler)
+        if parent.service_account_creation_handler
+          instance_eval(&parent.service_account_creation_handler)
         else
           service_account = EY::ServicesAPI::ServiceAccountCreation.from_request(request.body.read)
-          standard_response_params = MockingBirdService.service_account_creation_params
+          standard_response_params = parent.service_account_creation_params
           EY::ServicesAPI::ServiceAccountResponse.new(
             :provisioned_services_url => standard_response_params[:provisioned_services_url],
             :url                      => standard_response_params[:url],
@@ -40,15 +49,15 @@ module EyServicesFake
       end
 
       post '/api/1/provisioned_services_callback' do
-        if MockingBirdService.service_provisioning_handler
-          instance_eval(&MockingBirdService.service_provisioning_handler)
+        if parent.service_provisioning_handler
+          instance_eval(&parent.service_provisioning_handler)
         else
           provisioned_service = EY::ServicesAPI::ProvisionedServiceCreation.from_request(request.body.read)
-          standard_response_params = MockingBirdService.service_provisioned_params
+          standard_response_params = parent.service_provisioned_params
           EY::ServicesAPI::ProvisionedServiceResponse.new(
             :url                    => standard_response_params[:url],
             :vars                   => standard_response_params[:vars],
-            :configuration_required => false,
+            :configuration_required => standard_response_params[:configuration_required],
             :configuration_url      => standard_response_params[:configuration_url],
             :message                => EY::ServicesAPI::Message.new(:message_type => "status", :subject => "some provisioned service messages")
           ).to_hash.to_json
@@ -62,8 +71,8 @@ module EyServicesFake
       get '/sso/some_provisioned_service' do
         "SSO Hello Provisioned Service"
       end
+      end
     end
-
     class << self
       attr_accessor :service_account_creation_handler
       attr_accessor :service_provisioning_handler
@@ -72,14 +81,21 @@ module EyServicesFake
     end
 
     def reset!
-      MockingBirdService.service_account_creation_handler = nil
-      MockingBirdService.service_provisioning_handler = nil
-      MockingBirdService.service_deprovisioning_handler = nil
-      MockingBirdService.service_account_cancel_handler = nil
+      self.class.service_account_creation_handler = nil
+      self.class.service_provisioning_handler = nil
+      self.class.service_deprovisioning_handler = nil
+      self.class.service_account_cancel_handler = nil
+    end
+
+    def make_app
+      app = Class.new(Sinatra::Base)
+      self.class.implement_the_app(app)
+      app.parent = self.class
+      app
     end
 
     def app
-      Application
+      @app ||= make_app
     end
 
     def setup(auth_id, auth_key, base_url = nil, backend = nil)
@@ -137,7 +153,7 @@ module EyServicesFake
     end
 
     def register_service(registration_url)
-      EY::ServicesAPI.connection.register_service(registration_url, MockingBirdService.registration_params)
+      EY::ServicesAPI.connection.register_service(registration_url, self.class.registration_params)
     end
 
     def send_message(message_url, message_type, message_subject, message_body)
