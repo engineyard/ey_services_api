@@ -17,6 +17,7 @@ module EyServicesFake
       end
 
       delete '/api/1/some_provisioned_service' do
+        content_type :json
         if parent.service_deprovisioning_handler
           instance_eval(&parent.service_deprovisioning_handler)
         else
@@ -25,6 +26,7 @@ module EyServicesFake
       end
 
       delete '/api/1/some_service_account' do
+        content_type :json
         if parent.service_account_cancel_handler
           instance_eval(&parent.service_account_cancel_handler)
         else
@@ -33,34 +35,24 @@ module EyServicesFake
       end
 
       post '/api/1/service_accounts_callback' do
+        content_type :json
         if parent.service_account_creation_handler
           instance_eval(&parent.service_account_creation_handler)
         else
           service_account = EY::ServicesAPI::ServiceAccountCreation.from_request(request.body.read)
           standard_response_params = parent.service_account_creation_params
-          EY::ServicesAPI::ServiceAccountResponse.new(
-            :provisioned_services_url => standard_response_params[:provisioned_services_url],
-            :url                      => standard_response_params[:url],
-            :configuration_url        => standard_response_params[:configuration_url],
-            :configuration_required   => standard_response_params[:configuration_required],
-            :message                  => EY::ServicesAPI::Message.new(:message_type => "status", :subject => "some messages")
-          ).to_hash.to_json
+          EY::ServicesAPI::ServiceAccountResponse.new(parent.service_account_creation_params).to_hash.to_json
         end
       end
 
       post '/api/1/provisioned_services_callback' do
+        content_type :json
         if parent.service_provisioning_handler
           instance_eval(&parent.service_provisioning_handler)
         else
           provisioned_service = EY::ServicesAPI::ProvisionedServiceCreation.from_request(request.body.read)
           standard_response_params = parent.service_provisioned_params
-          EY::ServicesAPI::ProvisionedServiceResponse.new(
-            :url                    => standard_response_params[:url],
-            :vars                   => standard_response_params[:vars],
-            :configuration_required => standard_response_params[:configuration_required],
-            :configuration_url      => standard_response_params[:configuration_url],
-            :message                => EY::ServicesAPI::Message.new(:message_type => "status", :subject => "some provisioned service messages")
-          ).to_hash.to_json
+          EY::ServicesAPI::ProvisionedServiceResponse.new(parent.service_provisioned_params).to_hash.to_json
         end
       end
 
@@ -136,7 +128,8 @@ module EyServicesFake
         :provisioned_services_url => "#{base_url}api/1/provisioned_services_callback",
         :url => "#{base_url}api/1/some_service_account",
         :configuration_url => "#{base_url}sso/some_service_account",
-        :configuration_required => false
+        :configuration_required => false,
+        :message => EY::ServicesAPI::Message.new(:message_type => "status", :subject => "some messages")
       }
     end
 
@@ -149,6 +142,7 @@ module EyServicesFake
         :configuration_url => "#{base_url}sso/some_provisioned_service",
         :configuration_required => false,
         :url => "#{base_url}api/1/some_provisioned_service",
+        :message => EY::ServicesAPI::Message.new(:message_type => "status", :subject => "some provisioned service messages")
       }
     end
 

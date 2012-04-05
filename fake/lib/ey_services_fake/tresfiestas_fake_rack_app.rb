@@ -21,6 +21,7 @@ module EyServicesFake
       partner.services.each do |service|
         to_return << {"service" => service.attributes.merge('url' => URL_GEN.service(service)) }
       end
+      content_type :json
       to_return.to_json
     end
 
@@ -28,6 +29,7 @@ module EyServicesFake
     post '/api/1/partners/:partner_id/services' do |partner_id|
       partner = Partner.get!(partner_id)
       service_json = JSON.parse(request.body.read)["service"]
+      content_type :json
       if service_json["name"].to_s.empty?
         status 400
         {:error_messages => ["Name can't be blank"]}.to_json
@@ -41,6 +43,7 @@ module EyServicesFake
 
     get '/api/1/partners/:partner_id/services/:service_id' do |partner_id, service_id|
       partner = Partner.get!(partner_id)
+      content_type :json
       if service = partner.services.detect{ |s| s.id.to_s == service_id.to_s }
         {"service" => service.attributes}.to_json
       else
@@ -53,6 +56,7 @@ module EyServicesFake
       partner = Partner.get!(partner_id)
       service = partner.services.detect{ |s| s.id.to_s == service_id.to_s }
       update_params = JSON.parse(request.body.read)["service"]
+      content_type :json
       if update_params.key?("name") && update_params["name"].to_s.empty?
         status 400
         {:error_messages => ["Name can't be blank"]}.to_json
@@ -66,6 +70,7 @@ module EyServicesFake
       partner = Partner.get!(partner_id)
       service = partner.services.detect{ |s| s.id.to_s == service_id.to_s }
       service.destroy
+      content_type :json
       {}.to_json
     end
 
@@ -75,6 +80,7 @@ module EyServicesFake
       service_account = service.service_accounts.detect{ |sa| sa.id.to_s == service_account_id.to_s }
       service_account_atts = JSON.parse(request.body.read)["service_account"]
       service_account.update_attributes(service_account_atts)
+      content_type :json
       {}.to_json
     end
 
@@ -83,11 +89,13 @@ module EyServicesFake
       provisioned_service = service_account.provisioned_services.detect{ |ps| ps.id.to_s == provisioned_service_id.to_s}
       atts = JSON.parse(request.body.read)["provisioned_service"]
       provisioned_service.update_attributes(atts)
+      content_type :json
       {}.to_json
     end
 
     post '/api/1/partners/:partner_id/services/:service_id/service_accounts/:service_account_id/invoices' do |partner_id, service_id, service_account_id|
       invoice_params = JSON.parse(request.body.read)["invoice"]
+      content_type :json
       unless invoice_params['total_amount_cents'].is_a?(Fixnum)
         status 400
         return {:error_messages => ["Total Amount Cents must be an integer"]}.to_json
@@ -108,6 +116,7 @@ module EyServicesFake
       message_params = JSON.parse(request.body.read)["message"]
       message_type = message_params['message_type']
       subject = message_params['subject']
+      content_type :json
 
       if subject.to_s.empty?
         status 400
@@ -133,6 +142,7 @@ module EyServicesFake
       message_params = JSON.parse(request.body.read)["message"]
       subject = message_params['subject']
       message_type = message_params['message_type']
+      content_type :json
 
       if subject.to_s.empty?
         status 400
