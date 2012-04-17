@@ -109,6 +109,7 @@ module EyServicesFake
     end
 
     def sso_user
+      awsm
       actor(:awsm).sso_user #allows for nils (some implementations of AWSM may decide this is ok)
     end
 
