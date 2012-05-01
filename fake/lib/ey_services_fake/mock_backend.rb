@@ -67,6 +67,8 @@ module EyServicesFake
     end
 
     def reset!
+      @app = nil
+      @apps = nil
       @actors.values.each do |v|
         v.reset!
       end
@@ -126,6 +128,7 @@ module EyServicesFake
     def service_enablement
       sso_account_hash = self.sso_account
       service_hash = self.service
+
       unless actor(:tresfiestas).service_available_for_account?(service_hash[:id], sso_account_hash[:id])
         actor(:tresfiestas).make_service_available_for_account(service_hash[:id], sso_account_hash[:id])
       end
@@ -193,18 +196,19 @@ module EyServicesFake
     end
 
     def service_account_sso_url
-      configuration_url = service_account[:pushed_service_account][:configuration_url]
-      params = {
-        'timestamp' => Time.now.iso8601,
-        'ey_user_id' => sso_user.id,
-        'ey_user_name' => "Person Name",
-        'ey_return_to_url' => "https://cloud.engineyard.com/dashboard",
-        'access_level' => 'owner',
-      }
-      EY::ApiHMAC::SSO.sign(configuration_url,
-                            params,
-                            partner[:auth_id],
-                            partner[:auth_key])
+      actor(:awsm).service_account_sso_url(service[:id], sso_user, sso_account[:id])
+    end
+
+    def provisioned_service_sso_url
+      actor(:awsm).provisioned_service_sso_url(service_account[:id], app_deployment[:id], sso_user, sso_account[:id])
+    end
+
+    def trigger_mock_user_update(new_email)
+      actor(:tresfiestas).trigger_mock_user_update(sso_user, new_email)
+    end
+
+    def trigger_mock_user_delete
+      actor(:tresfiestas).trigger_mock_user_delete(sso_user)
     end
 
   end

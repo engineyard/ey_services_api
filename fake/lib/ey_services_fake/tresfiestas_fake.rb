@@ -64,7 +64,7 @@ module EyServicesFake
         :home_url => service_object.home_url,
         :label => service_object.label,
         :revenue_share => service_object.revenue_share,
-        :service_accounts_url => service_object.service_accounts_url
+        :service_accounts_url => service_object.service_accounts_url,
       }
     end
 
@@ -88,6 +88,7 @@ module EyServicesFake
           :provisioned_services_url => service_account_object.provisioned_services_url,
           :configuration_url => service_account_object.configuration_url,
           :url => service_account_object.url,
+          :users_url => service_account_object.users_url,
           :configuration_required => service_account_object.configuration_required,
         }
       }
@@ -132,6 +133,34 @@ module EyServicesFake
           to_return[:provisioned_service_id] = message.provisioned_service.id
         end
         to_return
+      end
+    end
+
+    def trigger_mock_user_update(sso_user, new_email)
+      sso_user.accounts.each do |account|
+        ServiceAccount.all(:sso_account_id => account.id).each do |service_account|
+          if service_account.users_url
+            users = app.partner_connection.get(service_account.users_url){|json,_| json }
+            users.each do |user|
+              unless user["user"]["ey_user_email"] == new_email
+                app.partner_connection.put(user["url"], :user => {:ey_user_email => new_email})
+              end
+            end
+          end
+        end
+      end
+    end
+
+    def trigger_mock_user_delete(sso_user)
+      sso_user.accounts.each do |account|
+        ServiceAccount.all(:sso_account_id => account.id).each do |service_account|
+          if service_account.users_url
+            users = app.partner_connection.get(service_account.users_url){|json,_| json }
+            users.each do |user|
+              app.partner_connection.delete(user["url"])
+            end
+          end
+        end
       end
     end
 

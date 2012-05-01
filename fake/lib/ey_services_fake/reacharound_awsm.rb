@@ -50,7 +50,7 @@ module EyServicesFake
 
     def sso_user
       the_one_email = "the-one-user@example.com"
-      User.first(:email => the_one_email) || User.create(:email => the_one_email)
+      User.first(:email => the_one_email) || User.create(:email => the_one_email, :external_service_id => Object.new.object_id)
     end
 
     def find_sso_account(sso_user)
@@ -108,6 +108,7 @@ module EyServicesFake
           service_account.configuration_url = result["service_account"]['configuration_url']
           service_account.url = result["service_account"]['url']
           service_account.configuration_required = result["service_account"]['configuration_required']
+          service_account.users_url = result["service_account"]['users_url']
         end
         if result["message"] && result["message"]["message_type"]
           Message.create(
@@ -160,6 +161,28 @@ module EyServicesFake
     def deprovision_service(provisioned_service_id)
       provisioned_service = ProvisionedService.get(provisioned_service_id)
       @connection.delete(provisioned_service.url)
+    end
+
+    def service_account_sso_url(service_id, sso_user, sso_account_id)
+      service_account = ServiceAccount.first(
+        :sso_account_id => sso_account_id, :service_id => service_id)
+      partner = service_account.service.partner
+      configuration_url = service_account.configuration_url
+      params = {
+        'timestamp' => Time.now.iso8601,
+        'ey_user_id' => sso_user.external_service_id,
+        'ey_user_name' => "Person Name",
+        'ey_return_to_url' => "https://cloud.engineyard.com/dashboard",
+        'access_level' => 'owner',
+      }
+      if service_account.users_url
+        params['ey_user_email'] = sso_user.email
+      end
+      require 'cgi'
+      EY::ApiHMAC::SSO.sign(configuration_url,
+                            params,
+                            partner.auth_id,
+                            partner.auth_key)
     end
 
   end

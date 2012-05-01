@@ -40,8 +40,8 @@ module EyServicesFake
           instance_eval(&parent.service_account_creation_handler)
         else
           service_account = EY::ServicesAPI::ServiceAccountCreation.from_request(request.body.read)
-          standard_response_params = parent.service_account_creation_params
-          EY::ServicesAPI::ServiceAccountResponse.new(parent.service_account_creation_params).to_hash.to_json
+          response_params = parent.service_account_creation_params
+          EY::ServicesAPI::ServiceAccountResponse.new(response_params).to_hash.to_json
         end
       end
 
@@ -57,6 +57,7 @@ module EyServicesFake
       end
 
       get '/sso/some_service_account' do
+        parent.account_sso_hook(params)
         "SSO Hello Service Account"
       end
 
@@ -129,7 +130,7 @@ module EyServicesFake
         :url => "#{base_url}api/1/some_service_account",
         :configuration_url => "#{base_url}sso/some_service_account",
         :configuration_required => false,
-        :message => EY::ServicesAPI::Message.new(:message_type => "status", :subject => "some messages")
+        :message => EY::ServicesAPI::Message.new(:message_type => "status", :subject => "some messages"),
       }
     end
 
@@ -144,6 +145,10 @@ module EyServicesFake
         :url => "#{base_url}api/1/some_provisioned_service",
         :message => EY::ServicesAPI::Message.new(:message_type => "status", :subject => "some provisioned service messages")
       }
+    end
+
+    def self.account_sso_hook(params)
+      #no-op
     end
 
     def register_service(registration_url)

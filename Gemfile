@@ -8,4 +8,5 @@ group :test, :development do
 
   gem 'rake'
   gem 'guard-rspec'
+  gem 'pry'
 end
