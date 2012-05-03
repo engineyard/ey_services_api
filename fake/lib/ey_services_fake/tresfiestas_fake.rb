@@ -60,6 +60,8 @@ module EyServicesFake
       service_object && {
         :id => service_object.id,
         :name => service_object.name,
+        :description => service_object.description,
+        :home_url => service_object.home_url,
         :label => service_object.label,
         :revenue_share => service_object.revenue_share,
         :service_accounts_url => service_object.service_accounts_url
