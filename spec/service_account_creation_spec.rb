@@ -5,19 +5,19 @@ describe EY::ServicesAPI::ServiceAccountCreation do
 
   describe "attributes given in service account creation" do
     before do
-      class SaveThis
+      class AccountSaveThis
         class << self
           attr_accessor :stuff
         end
       end
       EyServicesFake::MockingBirdService.service_account_creation_handler = Proc.new do
-        SaveThis.stuff = EY::ServicesAPI::ServiceAccountCreation.from_request(request.body.read)
+        AccountSaveThis.stuff = EY::ServicesAPI::ServiceAccountCreation.from_request(request.body.read)
         {}.to_json
       end
     end
     it "matches" do
       @service_account_hash = @tresfiestas.service_account
-      service_account = SaveThis.stuff
+      service_account = AccountSaveThis.stuff
       service_account.name.should eq @service_account_hash[:name]
       URI.parse(service_account.url).path.should eq URI.parse(@service_account_hash[:url]).path
       URI.parse(service_account.messages_url).path.should eq URI.parse(@service_account_hash[:messages_url]).path
