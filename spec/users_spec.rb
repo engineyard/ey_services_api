@@ -51,8 +51,14 @@ end
 describe "users" do
   describe "with a service account" do
     before do
-      UserHavingService.record_of_users.clear
+      @service_provider_actor = @tresfiestas.actors[:service_provider]
       @tresfiestas.actors[:service_provider] = UserHavingService.new
+    end
+    after do
+      @tresfiestas.actors[:service_provider] = @service_provider_actor
+    end
+    before do
+      UserHavingService.record_of_users.clear
       @service_account = @tresfiestas.service_account
       @messages_url = @service_account[:messages_url]
       @connection = EY::ServicesAPI.connection
