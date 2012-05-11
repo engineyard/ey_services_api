@@ -92,7 +92,7 @@ describe EY::ServicesAPI::ServiceAccountCreation do
     end
 
     it "got the right attributes" do
-      standard_response_params = @tresfiestas.actor(:service_provider).service_account_creation_params
+      standard_response_params = @tresfiestas.actor(:service_provider).service_account_creation_params(123)
       @service_account_hash[:configuration_required].should eq standard_response_params[:configuration_required]
       @service_account_hash[:configuration_url].should eq standard_response_params[:configuration_url]
       @service_account_hash[:provisioned_services_url].should eq standard_response_params[:provisioned_services_url]

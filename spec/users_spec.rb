@@ -10,22 +10,22 @@ class UserHavingService < EyServicesFake::MockingBirdService
   def self.implement_the_app(app)
     super(app)
     app.class_eval do
-      get "/api/1/users" do
+      get "/api/1/accounts/:account_id/users" do |account_id|
         content_type :json
         parent.record_of_users.map do |user_id, user|
           {
             "user" => user,
-            "url" => "#{parent.base_url}api/1/users/#{user_id}"
+            "url" => "#{parent.base_url}api/1/accounts/#{account_id}/users/#{user_id}"
           }
         end.to_json
       end
-      put "/api/1/users/:ey_user_id" do |ey_user_id|
+      put "/api/1/accounts/:account_id/users/:ey_user_id" do |account_id, ey_user_id|
         content_type :json
         json_post_body = JSON.parse(request.body.read)
         parent.record_of_users[ey_user_id].merge! json_post_body['user']
         {}.to_json
       end
-      delete "/api/1/users/:ey_user_id" do |ey_user_id|
+      delete "/api/1/accounts/:account_id/users/:ey_user_id" do |account_id, ey_user_id|
         content_type :json
         parent.record_of_users.delete(ey_user_id)
         {}.to_json
@@ -42,8 +42,8 @@ class UserHavingService < EyServicesFake::MockingBirdService
     }
   end
 
-  def self.service_account_creation_params
-    super.merge(:users_url => "#{base_url}api/1/users")
+  def self.service_account_creation_params(account_id)
+    super.merge(:users_url => "#{base_url}api/1/accounts/#{account_id}/users")
   end
 
 end

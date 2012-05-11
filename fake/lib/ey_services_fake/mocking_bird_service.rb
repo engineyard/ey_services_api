@@ -25,7 +25,7 @@ module EyServicesFake
         end
       end
 
-      delete '/api/1/some_service_account' do
+      delete '/api/1/account/:account_id' do |account_id|
         content_type :json
         if parent.service_account_cancel_handler
           instance_eval(&parent.service_account_cancel_handler)
@@ -40,12 +40,12 @@ module EyServicesFake
           instance_eval(&parent.service_account_creation_handler)
         else
           service_account = EY::ServicesAPI::ServiceAccountCreation.from_request(request.body.read)
-          response_params = parent.service_account_creation_params
+          response_params = parent.service_account_creation_params(123)
           EY::ServicesAPI::ServiceAccountResponse.new(response_params).to_hash.to_json
         end
       end
 
-      post '/api/1/provisioned_services_callback' do
+      post '/api/1/account/:account_id/provisioned_services_callback' do |account_id|
         content_type :json
         if parent.service_provisioning_handler
           instance_eval(&parent.service_provisioning_handler)
@@ -56,7 +56,7 @@ module EyServicesFake
         end
       end
 
-      get '/sso/some_service_account' do
+      get '/sso/account/:account_id' do |account_id|
         parent.account_sso_hook(params)
         "SSO Hello Service Account"
       end
@@ -121,14 +121,14 @@ module EyServicesFake
       }
     end
 
-    def service_account_creation_params
-      self.class.service_account_creation_params
+    def service_account_creation_params(account_id)
+      self.class.service_account_creation_params(account_id)
     end
-    def self.service_account_creation_params
+    def self.service_account_creation_params(account_id)
       {
-        :provisioned_services_url => "#{base_url}api/1/provisioned_services_callback",
-        :url => "#{base_url}api/1/some_service_account",
-        :configuration_url => "#{base_url}sso/some_service_account",
+        :provisioned_services_url => "#{base_url}api/1/account/#{account_id}/provisioned_services_callback",
+        :url => "#{base_url}api/1/account/#{account_id}",
+        :configuration_url => "#{base_url}sso/account/#{account_id}",
         :configuration_required => false,
         :message => EY::ServicesAPI::Message.new(:message_type => "status", :subject => "some messages"),
       }
