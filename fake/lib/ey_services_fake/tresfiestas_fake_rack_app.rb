@@ -15,6 +15,8 @@ module EyServicesFake
     # External API #
     ################
 
+    use EY::ApiHMAC::ApiAuth::Server, Partner
+
     get '/api/1/partners/:partner_id/services' do |partner_id|
       partner = Partner.get!(partner_id)
       to_return = []

@@ -7,6 +7,7 @@ env
 case "$1" in
 "internal")
    echo "running internal tests"
+   export REDIS_URL=redis://$REDIS_URL
    export BUNDLE_GEMFILE=EYIntegratedGemfile
    ;;
 "public")
