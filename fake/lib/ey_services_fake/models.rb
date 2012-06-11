@@ -46,6 +46,9 @@ module EyServicesFake
   end
   class Partner < Model
     has_many :Service, :services, :partner_id
+    def self.find_by_auth_id(auth_id)
+      first(:auth_id => auth_id)
+    end
   end
   class Service < Model
     has_many :ServiceEnablement, :service_enablements, :service_id
