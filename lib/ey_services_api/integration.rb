@@ -6,28 +6,25 @@ module EY
         create_service(service_registration_params(service_url), registration_url)
       end
 
-      require 'sinatra/base'
-      class Server < Sinatra::Base
-        post "/create_customer" do
-          # mapper...
-        end
+      def self.server
+        Server
       end
 
       def self.mapper=(mapper)
         @mapper = mapper
       end
 
-    private
-
       def self.mapper
         @mapper
       end
+
+    private
 
       def self.service_registration_params(base_url)
         {
           :name                     => fetch_from_description(:name),
           :label                    =>  fetch_from_description(:label),
-          :service_accounts_url     => "#{base_url + mapper.api_root}/create_customer",
+          :service_accounts_url     => "#{base_url + mapper.api_root}/service_accounts",
           :home_url                 => fetch_from_description(:home_url),
           :terms_and_conditions_url => fetch_from_description(:terms_and_conditions_url),
         }

@@ -9,6 +9,7 @@ require "ey_services_api/service_account_response"
 require "ey_services_api/provisioned_service_creation"
 require "ey_services_api/provisioned_service_response"
 require "ey_services_api/integration"
+require "ey_services_api/integration/server"
 
 module EY
   module ServicesAPI
