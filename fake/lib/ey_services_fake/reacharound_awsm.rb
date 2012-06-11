@@ -186,5 +186,27 @@ module EyServicesFake
                             partner.auth_key)
     end
 
+    def provisioned_service_sso_url(service_account_id, app_deployment_id, sso_user, sso_account_id)
+      service_account = ServiceAccount.get(service_account_id)
+      partner = service_account.service.partner
+      provisioned_service = ProvisionedService.first(:app_deployment_id => app_deployment_id)
+      configuration_url = provisioned_service.configuration_url
+      params = {
+        'timestamp' => Time.now.iso8601,
+        'ey_user_id' => sso_user.external_service_id,
+        'ey_user_name' => "Person Name",
+        'ey_return_to_url' => "https://cloud.engineyard.com/dashboard",
+        'access_level' => 'owner',
+      }
+      if service_account.users_url
+        params['ey_user_email'] = sso_user.email
+      end
+      require 'cgi'
+      EY::ApiHMAC::SSO.sign(configuration_url,
+                            params,
+                            partner.auth_id,
+                            partner.auth_key)
+    end
+
   end
 end
