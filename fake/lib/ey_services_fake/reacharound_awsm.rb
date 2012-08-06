@@ -96,6 +96,7 @@ module EyServicesFake
       service_account = ServiceAccount.create(:sso_account_id => sso_account_id, :active => false, :service_id => service_id, :dashboard_notifications_url => "#{base_url}/dashboard_notifications_url")
       service = Service.get(service_id)
       creation_attributes = {
+        :id             => service_account.id,
         :name           => Account.get(sso_account_id).name,
         :url            => url_gen.partner_service_account(service, service_account),
         :messages_url   => url_gen.messages(service, service_account),

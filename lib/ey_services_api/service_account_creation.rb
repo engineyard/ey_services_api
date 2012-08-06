@@ -1,6 +1,6 @@
 module EY
   module ServicesAPI
-    class ServiceAccountCreation < APIStruct.new(:name, :url, :messages_url, :invoices_url)
+    class ServiceAccountCreation < APIStruct.new(:id, :name, :url, :messages_url, :invoices_url)
 
       def self.from_request(request)
         json = JSON.parse(request)

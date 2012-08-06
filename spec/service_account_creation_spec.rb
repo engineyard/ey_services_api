@@ -19,6 +19,7 @@ describe EY::ServicesAPI::ServiceAccountCreation do
       @service_account_hash = @tresfiestas.service_account
       service_account = AccountSaveThis.stuff
       service_account.name.should eq @service_account_hash[:name]
+      service_account.id.should eq @service_account_hash[:id]
       URI.parse(service_account.url).path.should eq URI.parse(@service_account_hash[:url]).path
       URI.parse(service_account.messages_url).path.should eq URI.parse(@service_account_hash[:messages_url]).path
       URI.parse(service_account.invoices_url).path.should eq URI.parse(@service_account_hash[:invoices_url]).path
