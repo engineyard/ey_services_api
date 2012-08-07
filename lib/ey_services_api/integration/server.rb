@@ -45,9 +45,17 @@ module EY
           response.to_hash.to_json
         end
 
-        #TODO: implement delete "/service_accounts/:service_account_id"
+        delete "/service_accounts/:service_account_id" do |service_account_id|
+          mapper.service_account_cancel(service_account_id)
+          content_type :json
+          {}.to_json
+        end
 
-        #TODO: implement delete "/service_accounts/:service_account_id/provisioned_services/provisioned_service_id"
+        delete "/service_accounts/:service_account_id/provisioned_services/:provisioned_service_id" do |service_account_id, provisioned_service_id|
+          mapper.provisioned_service_cancel(service_account_id, provisioned_service_id)
+          content_type :json
+          {}.to_json
+        end
 
         private
 
