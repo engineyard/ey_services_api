@@ -151,7 +151,7 @@ module EyServicesFake
     end
 
     def destroy_service_account
-      actor(:awsm).disable_service(service_account[:id])
+      actor(:awsm).disable_service(service[:id], service_account[:sso_account][:id], service_account[:id])
     end
 
     def app_deployment

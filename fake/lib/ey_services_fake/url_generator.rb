@@ -29,6 +29,10 @@ module EyServicesFake
       "#{@base_url}/api/1/partners/#{service.partner_id}/services/#{service.id}/service_accounts/#{service_account.id}/invoices"
     end
 
+    def invoice(service, service_account, invoice)
+      "#{@base_url}/api/1/partners/#{service.partner_id}/services/#{service.id}/service_accounts/#{service_account.id}/invoices/#{invoice.id}"
+    end
+
     def partner_provisioned_service(service_account, provisioned_service)
       "#{@base_url}/api/1/service_accounts/#{service_account.id}/provisioned_service/#{provisioned_service.id}"
     end

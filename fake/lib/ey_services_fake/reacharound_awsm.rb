@@ -122,7 +122,7 @@ module EyServicesFake
       end
     end
 
-    def disable_service(service_account_id)
+    def disable_service(service_id, sso_account_id, service_account_id)
       service_account = ServiceAccount.get(service_account_id)
       @connection.delete(service_account.url)
     end

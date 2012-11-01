@@ -6,6 +6,7 @@ gemspec
 group :test, :development do
   gemspec :path => "fake"
   gem 'rake'
+  gem 'timecop'
 
   #private Gem deps of fake_awsm
   gem 'ey_sso', :git => "git@github.com:engineyard/ey_sso.git", :ref => "v0.13.1"

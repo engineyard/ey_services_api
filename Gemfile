@@ -5,6 +5,7 @@ gemspec
 
 group :test, :development do
   gemspec :path => "fake"
+  gem 'timecop'
 
   gem 'rake'
   gem 'guard-rspec'

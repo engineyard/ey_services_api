@@ -63,6 +63,22 @@ module EY
         post(invoices_url, :invoice => invoice.to_hash)
       end
 
+      def list_invoices(invoices_url)
+        get(invoices_url) do |json_body, response_location|
+          json_body.map do |json_item|
+            invoice = Invoice.new(json_item["invoice"])
+            invoice.connection = self
+            invoice.url = json_item["invoice"]["url"]
+            invoice.status = json_item["invoice"]["status"]
+            invoice
+          end
+        end
+      end
+
+      def destroy_invoice(url)
+        delete(url)
+      end
+
     end
   end
 end

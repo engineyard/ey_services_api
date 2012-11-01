@@ -114,6 +114,27 @@ module EyServicesFake
       {}.to_json
     end
 
+    get '/api/1/partners/:partner_id/services/:service_id/service_accounts/:service_account_id/invoices' do |partner_id, service_id, service_account_id|
+      service_account = ServiceAccount.get!(service_account_id)
+      content_type :json
+      service_account.invoices.map do |invoice|
+        {"invoice" => {
+          'total_amount_cents' => invoice.total_amount_cents,
+          'line_item_description' => invoice.line_item_description,
+          'unique_id' => invoice.unique_id.to_s,
+          'url' => URL_GEN.invoice(service_account.service, service_account, invoice),
+          'status' => "pending",
+        }}
+      end.to_json
+    end
+
+    delete '/api/1/partners/:partner_id/services/:service_id/service_accounts/:service_account_id/invoices/:invoice_id' do |partner_id, service_id, service_account_id, invoice_id|
+      invoice = Invoice.get!(invoice_id)
+      invoice.destroy
+      content_type :json
+      {}.to_json
+    end
+
     post '/api/1/partners/:partner_id/services/:service_id/service_accounts/:service_account_id/messages' do |partner_id, service_id, service_account_id|
       message_params = JSON.parse(request.body.read)["message"]
       message_type = message_params['message_type']

@@ -16,3 +16,9 @@ RSpec.configure do |config|
     @tresfiestas = EY::ServicesAPI.mock_backend
   end
 end
+
+def internal_only_tests
+  if ENV["BUNDLE_GEMFILE"] == "EYIntegratedGemfile"
+    yield
+  end
+end
