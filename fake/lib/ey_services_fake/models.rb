@@ -74,4 +74,9 @@ module EyServicesFake
     belongs_to :ProvisionedService, :provisioned_service, :provisioned_service_id
   end
   class Awsm < Model; end
+  class PartnerOrAwsm
+    def self.find_by_auth_id(auth_id)
+      Awsm.first(:auth_id => auth_id) || Partner.find_by_auth_id(auth_id)
+    end
+  end
 end
