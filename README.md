@@ -1,4 +1,4 @@
-# EY Services API
+# EY Add-on Services API
 
 This gem provides basic ability to interact with Engine Yard as an Add-on service partner (e.g. [http://www.engineyard.com/partners/platform-services](http://www.engineyard.com/partners/platform-services)).
 
