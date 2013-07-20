@@ -4,11 +4,13 @@ require 'sinatra/base'
 
 RSpec.configure do |config|
   config.before(:each) do
-    if ENV["BUNDLE_GEMFILE"] == "EYIntegratedGemfile"
+    if ENV["TESTING_TRESFIESTAS"] == "true"
+      require 'tresfiestas/gem_integration_test'
+      gemintegration = Tresfiestas::GemIntegrationTest.new
       require 'ey_services_fake/mocking_bird_service'
       require 'tresfiestas/gem_integration_test'
-      require 'fake_awsm/test_helper'
-      EY::ServicesAPI.enable_mock!(EyServicesFake::MockingBirdService.new, Tresfiestas::GemIntegrationTest.new, FakeAWSM::TestHelper.new)
+      require 'ey_services_fake_internal/fake_awsm/test_helper'
+      EY::ServicesAPI.enable_mock!(EyServicesFake::MockingBirdService.new, gemintegration, FakeAWSM::TestHelper.new)
     else
       require 'ey_services_fake/mocking_bird_service'
       EY::ServicesAPI.enable_mock!(EyServicesFake::MockingBirdService.new)
