@@ -116,12 +116,14 @@ describe EY::ServicesAPI::ProvisionedServiceCreation do
           provisioned_service = @tresfiestas.provisioned_service
           @connection.update_provisioned_service(provisioned_service[:url],
                                                  :configuration_required => true,
+                                                 :vars => {"FOO" => "bar"},
                                                  :configuration_url => "something else")
         end
 
         it "works" do
           pushed = @tresfiestas.provisioned_service[:pushed_provisioned_service]
           pushed[:configuration_url].should eq "something else"
+          pushed[:vars].should eq({"FOO" => "bar"})
           pushed[:configuration_required].should eq true
         end
       end
