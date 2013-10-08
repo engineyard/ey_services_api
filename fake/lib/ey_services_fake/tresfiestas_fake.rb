@@ -36,7 +36,7 @@ module EyServicesFake
       find_awsm
     end
 
-    def find_partner(sso_user)
+    def find_partner(sso_user, api_version = "ignored")
       partner_object = Partner.first
       partner_object && {
         :id => partner_object.id,
@@ -47,7 +47,7 @@ module EyServicesFake
       }
     end
 
-    def create_partner(sso_user, partner_base_url, partner_app)
+    def create_partner(sso_user, partner_base_url, partner_app, api_version = "ignored")
       Partner.create(:auth_id => "123edf", :auth_key => "abc456", :name => "Some-Partner")
       app.partner_connection = EY::ApiHMAC::AuthedConnection.new("123edf", "abc456")
       app.partner_connection.backend = partner_app
