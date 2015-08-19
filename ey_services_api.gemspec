@@ -10,6 +10,7 @@ Gem::Specification.new do |s|
   s.homepage    = "https://github.com/engineyard/ey_services_api"
   s.summary     = %q{API for Partner Services (talks to services.engineyard.com)}
   s.description = %q{API for Partner Services (talks to services.engineyard.com)}
+  s.license = 'MIT'
 
   s.rubyforge_project = "ey_services_api"
 

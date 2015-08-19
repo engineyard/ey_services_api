@@ -10,6 +10,7 @@ Gem::Specification.new do |s|
   s.homepage    = "https://github.com/engineyard/ey_services_api"
   s.summary     = %q{A fake for use when writting tests against the ey_services_api}
   s.description = %q{A fake for use when writting tests against the ey_services_api}
+  s.license = 'MIT'
 
   s.rubyforge_project = "ey_services_fake"
 
