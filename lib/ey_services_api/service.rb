@@ -1,7 +1,7 @@
 #TODO: list services should populate the URL of this object
 module EY
   module ServicesAPI
-    class Service < APIStruct.new(:name, :label, :description, :home_url, :service_accounts_url, :terms_and_conditions_url, :vars)
+    class Service < APIStruct.new(:name, :label, :description, :home_url, :service_accounts_url, :vars)
       attr_accessor :connection
       attr_accessor :url
 
