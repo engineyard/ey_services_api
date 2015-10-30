@@ -18,6 +18,7 @@ module EyServicesFake
       unless actors[:tresfiestas]
         actors[:tresfiestas] = tresfiestas_fake.new
       end
+      actors[:api_version] ||= 1
       new(actors)
     end
 
@@ -69,8 +70,8 @@ module EyServicesFake
     def reset!
       @app = nil
       @apps = nil
-      @actors.values.each do |v|
-        v.reset!
+      @actors.each do |k, v|
+        v.reset! unless k == :api_version
       end
     end
 
@@ -84,9 +85,9 @@ module EyServicesFake
     end
 
     def partner
-      partner_hash = actor(:tresfiestas).find_partner(sso_user)
+      partner_hash = actor(:tresfiestas).find_partner(sso_user, actor(:api_version))
       unless partner_hash
-        partner_hash = actor(:tresfiestas).create_partner(sso_user, actor(:service_provider).base_url, app_for(:service_provider))
+        partner_hash = actor(:tresfiestas).create_partner(sso_user, actor(:service_provider).base_url, app_for(:service_provider), actor(:api_version))
         @actors.values.each do |actor|
           if actor.respond_to?(:service_provider_setup)
             actor.service_provider_setup(partner_hash[:auth_id], partner_hash[:auth_key], actor(:service_provider).base_url, app_for(:service_provider))
@@ -101,7 +102,7 @@ module EyServicesFake
       partner_hash = self.partner
       service_hash = actor(:tresfiestas).find_service(partner_hash[:id])
       unless service_hash
-        actor(:service_provider).register_service(partner_hash[:registration_url])
+        actor(:service_provider).register_service(partner_hash[:registration_url], actor(:api_version))
         service_hash = actor(:tresfiestas).find_service(partner_hash[:id])
       end
       if actor(:tresfiestas).respond_to?(:document_service)
